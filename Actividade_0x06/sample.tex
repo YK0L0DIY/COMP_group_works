@@ -1,0 +1,26 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{tikz-qtree}
+\usetikzlibrary{shadows,trees}
+\begin{document}
+\tikzset{font=\small,
+level distance=.8cm,
+every node/.style=
+    {color=white,
+    rectangle,rounded corners,
+    align=center,
+    text = black
+    },
+edge from parent/.style=
+    {draw=blue,
+    thick
+    }}
+
+\centering
+\begin{tikzpicture}
+\Tree [.exp [.assign [.id $a$ ] [.exp [.num $1$ ] ] ] ] 
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,51 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{tikz-qtree}
+\usetikzlibrary{shadows,trees}
+\begin{document}
+\tikzset{font=\small,
+level distance=.8cm,
+every node/.style=
+    {color=white,
+    rectangle,rounded corners,
+    align=center,
+    text = black
+    },
+edge from parent/.style=
+    {draw=blue,
+    thick
+    }}
+
+\centering
+\begin{tikzpicture}
+\Tree [.seq 
+[.exp [.binop [.$+$ ] [.exp [.binop [.$+$ ] [.exp [.num $120$ ] ]
+[.exp [.binop [.$*$ ] [.exp [.num $3$ ] ]
+[.exp [.num $2$ ] ]
+ ] ]
+  ] ]
+ [.exp [.num $1$ ] ]
+ ] ]
+ [.seq 
+[.exp [.assign [.id $b$ ] [.exp [.binop [.$+$ ] [.exp [.binop [.$+$ ] [.exp [.num $9$ ] ]
+[.exp [.num $2$ ] ]
+ ] ]
+ [.exp [.num $3$ ] ]
+ ] ]
+  ] ]
+ [.seq 
+[.exp [.assign [.id $c$ ] [.exp [.binop [.$*$ ] [.exp [.binop [.$+$ ] [.exp [.id $b$ ] ]
+[.exp [.num $1$ ] ]
+ ] ]
+ [.exp [.id $b$ ] ]
+ ] ]
+  ] ]
+ [.\emph{empty} ]
+] 
+] 
+] 
+\end{tikzpicture}
+\end{document}
