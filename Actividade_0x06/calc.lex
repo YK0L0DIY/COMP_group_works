@@ -1,5 +1,5 @@
 %{
-#include <stdlib.h> 
+#include <stdlib.h>
 #include "calctypes.h"
 #include "parser.h"
 
@@ -8,7 +8,7 @@
 INT  [0-9]+
 ID   [a-zA-Z_][a-zA-Z_0-9]*
 SPC  [\t ]*
-			
+
 %%
 
 {INT}   {yylval.val = atof(yytext); return NUM;}
@@ -21,7 +21,7 @@ SPC  [\t ]*
 "="	{ return ASSIGN; }
 "quit"	{ exit(0); }
 \n	{ return NL; }
-{ID}   {yylval.name = strdup(yytext); return ID;}
+{ID}   {yylval.id = strdup(yytext); return ID;}
 .	{/*ignorar (- ou dar erro?)*/}
 
 %%
