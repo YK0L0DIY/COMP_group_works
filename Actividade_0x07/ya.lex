@@ -12,6 +12,7 @@
 
 INT     [0-9]+
 FLOAT   [0-9]+\.[0-9]+
+STRING  \"(\\.|[^"\\])*\"
 ID      [a-zA-Z_][a-zA-Z_0-9]*
 SPC     [\t ]*
 
@@ -20,6 +21,7 @@ SPC     [\t ]*
 {INT}       {yylval.ival = atoi(yytext); return INT;}
 {FLOAT}     {yylval.fval = atof(yytext); return FLOAT;}
 {ID}        {yylval.id = strdup(yytext); return ID;}
+{STRING}    {yylval.sval = strdup(yytext); return STR;}
 {SPC}       {INC_COL(strlen(yytext))}
 
 \n          {INC_LINE;}
