@@ -1,0 +1,1466 @@
+Terminals unused in grammar
+
+   QUOTE
+   DOT
+   EQUALS
+   NEXT
+   ADD
+   SUB
+   DIV
+   MUL
+   MOD
+   POW
+   LBRACK
+   RBRACK
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: %empty
+    2        | decls
+
+    3 decls: decl
+    4      | decl decls
+
+    5 decl: ids COLON type SEMICOLON
+    6     | ids COLON type ASSIGN exp SEMICOLON
+    7     | ID LPAR args RPAR COLON type LBRACE statms RBRACE SEMICOLON
+    8     | ID LPAR args RPAR COLON T_VOID LBRACE statms RBRACE SEMICOLON
+    9     | DEFINE ID type SEMICOLON
+
+   10 statms: statm
+   11       | statm statms
+
+   12 statm: decl
+   13      | IF bool_exp THEN LBRACE statms RBRACE SEMICOLON
+   14      | IF bool_exp THEN LBRACE statms RBRACE ELSE LBRACE statms RBRACE SEMICOLON
+   15      | WHILE bool_exp DO LBRACE statms RBRACE SEMICOLON
+   16      | BREAK SEMICOLON
+   17      | RETURN exp SEMICOLON
+
+   18 bool_exp: exp
+   19         | bool_exp AND bool_exp
+   20         | bool_exp OR bool_exp
+   21         | NOT bool_exp
+   22         | bool_exp NOT_EQUALS bool_exp
+   23         | bool_exp GREATER bool_exp
+   24         | bool_exp GREATER_EQUAL bool_exp
+   25         | bool_exp LESS bool_exp
+   26         | bool_exp LESS_EQUAL bool_exp
+
+   27 args: ID COLON type
+   28     | ID COLON type COMMA args
+
+   29 ids: ID
+   30    | ID COMMA ids
+
+   31 exp: INT
+   32    | FLOAT
+   33    | STR
+   34    | BOOL
+
+   35 type: T_INT
+   36     | T_FLOAT
+   37     | T_STR
+   38     | T_BOOL
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+INT (258) 31
+FLOAT (259) 32
+STR (260) 33
+ID (261) 7 8 9 27 28 29 30
+BOOL (262) 34
+SEMICOLON (263) 5 6 7 8 9 13 14 15 16 17
+QUOTE (264)
+DOT (265)
+COMMA (266) 28 30
+COLON (267) 5 6 7 8 27 28
+NOT_EQUALS (268) 22
+EQUALS (269)
+LESS (270) 25
+GREATER (271) 23
+LESS_EQUAL (272) 26
+GREATER_EQUAL (273) 24
+OR (274) 20
+AND (275) 19
+NOT (276) 21
+T_INT (277) 35
+T_FLOAT (278) 36
+T_STR (279) 37
+T_BOOL (280) 38
+T_VOID (281) 8
+DEFINE (282) 9
+IF (283) 13 14
+THEN (284) 13 14
+ELSE (285) 14
+WHILE (286) 15
+DO (287) 15
+RETURN (288) 17
+BREAK (289) 16
+NEXT (290)
+ASSIGN (291) 6
+ADD (292)
+SUB (293)
+DIV (294)
+MUL (295)
+MOD (296)
+POW (297)
+LPAR (298) 7 8
+RPAR (299) 7 8
+LBRACK (300)
+RBRACK (301)
+LBRACE (302) 7 8 13 14 15
+RBRACE (303) 7 8 13 14 15
+
+
+Nonterminals, with rules where they appear
+
+$accept (49)
+    on left: 0
+program (50)
+    on left: 1 2, on right: 0
+decls (51)
+    on left: 3 4, on right: 2 4
+decl (52)
+    on left: 5 6 7 8 9, on right: 3 4 12
+statms (53)
+    on left: 10 11, on right: 7 8 11 13 14 15
+statm (54)
+    on left: 12 13 14 15 16 17, on right: 10 11
+bool_exp (55)
+    on left: 18 19 20 21 22 23 24 25 26, on right: 13 14 15 19 20 21
+    22 23 24 25 26
+args (56)
+    on left: 27 28, on right: 7 8 28
+ids (57)
+    on left: 29 30, on right: 5 6 30
+exp (58)
+    on left: 31 32 33 34, on right: 6 17 18
+type (59)
+    on left: 35 36 37 38, on right: 5 6 7 9 27 28
+
+
+State 0
+
+    0 $accept: . program $end
+    1 program: . %empty  [$end]
+    2        | . decls
+    3 decls: . decl
+    4      | . decl decls
+    5 decl: . ids COLON type SEMICOLON
+    6     | . ids COLON type ASSIGN exp SEMICOLON
+    7     | . ID LPAR args RPAR COLON type LBRACE statms RBRACE SEMICOLON
+    8     | . ID LPAR args RPAR COLON T_VOID LBRACE statms RBRACE SEMICOLON
+    9     | . DEFINE ID type SEMICOLON
+   29 ids: . ID
+   30    | . ID COMMA ids
+
+    ID      shift, and go to state 1
+    DEFINE  shift, and go to state 2
+
+    $default  reduce using rule 1 (program)
+
+    program  go to state 3
+    decls    go to state 4
+    decl     go to state 5
+    ids      go to state 6
+
+
+State 1
+
+    7 decl: ID . LPAR args RPAR COLON type LBRACE statms RBRACE SEMICOLON
+    8     | ID . LPAR args RPAR COLON T_VOID LBRACE statms RBRACE SEMICOLON
+   29 ids: ID .  [COLON]
+   30    | ID . COMMA ids
+
+    COMMA  shift, and go to state 7
+    LPAR   shift, and go to state 8
+
+    $default  reduce using rule 29 (ids)
+
+
+State 2
+
+    9 decl: DEFINE . ID type SEMICOLON
+
+    ID  shift, and go to state 9
+
+
+State 3
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 10
+
+
+State 4
+
+    2 program: decls .
+
+    $default  reduce using rule 2 (program)
+
+
+State 5
+
+    3 decls: . decl
+    3      | decl .  [$end]
+    4      | . decl decls
+    4      | decl . decls
+    5 decl: . ids COLON type SEMICOLON
+    6     | . ids COLON type ASSIGN exp SEMICOLON
+    7     | . ID LPAR args RPAR COLON type LBRACE statms RBRACE SEMICOLON
+    8     | . ID LPAR args RPAR COLON T_VOID LBRACE statms RBRACE SEMICOLON
+    9     | . DEFINE ID type SEMICOLON
+   29 ids: . ID
+   30    | . ID COMMA ids
+
+    ID      shift, and go to state 1
+    DEFINE  shift, and go to state 2
+
+    $default  reduce using rule 3 (decls)
+
+    decls  go to state 11
+    decl   go to state 5
+    ids    go to state 6
+
+
+State 6
+
+    5 decl: ids . COLON type SEMICOLON
+    6     | ids . COLON type ASSIGN exp SEMICOLON
+
+    COLON  shift, and go to state 12
+
+
+State 7
+
+   29 ids: . ID
+   30    | . ID COMMA ids
+   30    | ID COMMA . ids
+
+    ID  shift, and go to state 13
+
+    ids  go to state 14
+
+
+State 8
+
+    7 decl: ID LPAR . args RPAR COLON type LBRACE statms RBRACE SEMICOLON
+    8     | ID LPAR . args RPAR COLON T_VOID LBRACE statms RBRACE SEMICOLON
+   27 args: . ID COLON type
+   28     | . ID COLON type COMMA args
+
+    ID  shift, and go to state 15
+
+    args  go to state 16
+
+
+State 9
+
+    9 decl: DEFINE ID . type SEMICOLON
+   35 type: . T_INT
+   36     | . T_FLOAT
+   37     | . T_STR
+   38     | . T_BOOL
+
+    T_INT    shift, and go to state 17
+    T_FLOAT  shift, and go to state 18
+    T_STR    shift, and go to state 19
+    T_BOOL   shift, and go to state 20
+
+    type  go to state 21
+
+
+State 10
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+State 11
+
+    4 decls: decl decls .
+
+    $default  reduce using rule 4 (decls)
+
+
+State 12
+
+    5 decl: ids COLON . type SEMICOLON
+    6     | ids COLON . type ASSIGN exp SEMICOLON
+   35 type: . T_INT
+   36     | . T_FLOAT
+   37     | . T_STR
+   38     | . T_BOOL
+
+    T_INT    shift, and go to state 17
+    T_FLOAT  shift, and go to state 18
+    T_STR    shift, and go to state 19
+    T_BOOL   shift, and go to state 20
+
+    type  go to state 22
+
+
+State 13
+
+   29 ids: ID .  [COLON]
+   30    | ID . COMMA ids
+
+    COMMA  shift, and go to state 7
+
+    $default  reduce using rule 29 (ids)
+
+
+State 14
+
+   30 ids: ID COMMA ids .
+
+    $default  reduce using rule 30 (ids)
+
+
+State 15
+
+   27 args: ID . COLON type
+   28     | ID . COLON type COMMA args
+
+    COLON  shift, and go to state 23
+
+
+State 16
+
+    7 decl: ID LPAR args . RPAR COLON type LBRACE statms RBRACE SEMICOLON
+    8     | ID LPAR args . RPAR COLON T_VOID LBRACE statms RBRACE SEMICOLON
+
+    RPAR  shift, and go to state 24
+
+
+State 17
+
+   35 type: T_INT .
+
+    $default  reduce using rule 35 (type)
+
+
+State 18
+
+   36 type: T_FLOAT .
+
+    $default  reduce using rule 36 (type)
+
+
+State 19
+
+   37 type: T_STR .
+
+    $default  reduce using rule 37 (type)
+
+
+State 20
+
+   38 type: T_BOOL .
+
+    $default  reduce using rule 38 (type)
+
+
+State 21
+
+    9 decl: DEFINE ID type . SEMICOLON
+
+    SEMICOLON  shift, and go to state 25
+
+
+State 22
+
+    5 decl: ids COLON type . SEMICOLON
+    6     | ids COLON type . ASSIGN exp SEMICOLON
+
+    SEMICOLON  shift, and go to state 26
+    ASSIGN     shift, and go to state 27
+
+
+State 23
+
+   27 args: ID COLON . type
+   28     | ID COLON . type COMMA args
+   35 type: . T_INT
+   36     | . T_FLOAT
+   37     | . T_STR
+   38     | . T_BOOL
+
+    T_INT    shift, and go to state 17
+    T_FLOAT  shift, and go to state 18
+    T_STR    shift, and go to state 19
+    T_BOOL   shift, and go to state 20
+
+    type  go to state 28
+
+
+State 24
+
+    7 decl: ID LPAR args RPAR . COLON type LBRACE statms RBRACE SEMICOLON
+    8     | ID LPAR args RPAR . COLON T_VOID LBRACE statms RBRACE SEMICOLON
+
+    COLON  shift, and go to state 29
+
+
+State 25
+
+    9 decl: DEFINE ID type SEMICOLON .
+
+    $default  reduce using rule 9 (decl)
+
+
+State 26
+
+    5 decl: ids COLON type SEMICOLON .
+
+    $default  reduce using rule 5 (decl)
+
+
+State 27
+
+    6 decl: ids COLON type ASSIGN . exp SEMICOLON
+   31 exp: . INT
+   32    | . FLOAT
+   33    | . STR
+   34    | . BOOL
+
+    INT    shift, and go to state 30
+    FLOAT  shift, and go to state 31
+    STR    shift, and go to state 32
+    BOOL   shift, and go to state 33
+
+    exp  go to state 34
+
+
+State 28
+
+   27 args: ID COLON type .  [RPAR]
+   28     | ID COLON type . COMMA args
+
+    COMMA  shift, and go to state 35
+
+    $default  reduce using rule 27 (args)
+
+
+State 29
+
+    7 decl: ID LPAR args RPAR COLON . type LBRACE statms RBRACE SEMICOLON
+    8     | ID LPAR args RPAR COLON . T_VOID LBRACE statms RBRACE SEMICOLON
+   35 type: . T_INT
+   36     | . T_FLOAT
+   37     | . T_STR
+   38     | . T_BOOL
+
+    T_INT    shift, and go to state 17
+    T_FLOAT  shift, and go to state 18
+    T_STR    shift, and go to state 19
+    T_BOOL   shift, and go to state 20
+    T_VOID   shift, and go to state 36
+
+    type  go to state 37
+
+
+State 30
+
+   31 exp: INT .
+
+    $default  reduce using rule 31 (exp)
+
+
+State 31
+
+   32 exp: FLOAT .
+
+    $default  reduce using rule 32 (exp)
+
+
+State 32
+
+   33 exp: STR .
+
+    $default  reduce using rule 33 (exp)
+
+
+State 33
+
+   34 exp: BOOL .
+
+    $default  reduce using rule 34 (exp)
+
+
+State 34
+
+    6 decl: ids COLON type ASSIGN exp . SEMICOLON
+
+    SEMICOLON  shift, and go to state 38
+
+
+State 35
+
+   27 args: . ID COLON type
+   28     | . ID COLON type COMMA args
+   28     | ID COLON type COMMA . args
+
+    ID  shift, and go to state 15
+
+    args  go to state 39
+
+
+State 36
+
+    8 decl: ID LPAR args RPAR COLON T_VOID . LBRACE statms RBRACE SEMICOLON
+
+    LBRACE  shift, and go to state 40
+
+
+State 37
+
+    7 decl: ID LPAR args RPAR COLON type . LBRACE statms RBRACE SEMICOLON
+
+    LBRACE  shift, and go to state 41
+
+
+State 38
+
+    6 decl: ids COLON type ASSIGN exp SEMICOLON .
+
+    $default  reduce using rule 6 (decl)
+
+
+State 39
+
+   28 args: ID COLON type COMMA args .
+
+    $default  reduce using rule 28 (args)
+
+
+State 40
+
+    5 decl: . ids COLON type SEMICOLON
+    6     | . ids COLON type ASSIGN exp SEMICOLON
+    7     | . ID LPAR args RPAR COLON type LBRACE statms RBRACE SEMICOLON
+    8     | . ID LPAR args RPAR COLON T_VOID LBRACE statms RBRACE SEMICOLON
+    8     | ID LPAR args RPAR COLON T_VOID LBRACE . statms RBRACE SEMICOLON
+    9     | . DEFINE ID type SEMICOLON
+   10 statms: . statm
+   11       | . statm statms
+   12 statm: . decl
+   13      | . IF bool_exp THEN LBRACE statms RBRACE SEMICOLON
+   14      | . IF bool_exp THEN LBRACE statms RBRACE ELSE LBRACE statms RBRACE SEMICOLON
+   15      | . WHILE bool_exp DO LBRACE statms RBRACE SEMICOLON
+   16      | . BREAK SEMICOLON
+   17      | . RETURN exp SEMICOLON
+   29 ids: . ID
+   30    | . ID COMMA ids
+
+    ID      shift, and go to state 1
+    DEFINE  shift, and go to state 2
+    IF      shift, and go to state 42
+    WHILE   shift, and go to state 43
+    RETURN  shift, and go to state 44
+    BREAK   shift, and go to state 45
+
+    decl    go to state 46
+    statms  go to state 47
+    statm   go to state 48
+    ids     go to state 6
+
+
+State 41
+
+    5 decl: . ids COLON type SEMICOLON
+    6     | . ids COLON type ASSIGN exp SEMICOLON
+    7     | . ID LPAR args RPAR COLON type LBRACE statms RBRACE SEMICOLON
+    7     | ID LPAR args RPAR COLON type LBRACE . statms RBRACE SEMICOLON
+    8     | . ID LPAR args RPAR COLON T_VOID LBRACE statms RBRACE SEMICOLON
+    9     | . DEFINE ID type SEMICOLON
+   10 statms: . statm
+   11       | . statm statms
+   12 statm: . decl
+   13      | . IF bool_exp THEN LBRACE statms RBRACE SEMICOLON
+   14      | . IF bool_exp THEN LBRACE statms RBRACE ELSE LBRACE statms RBRACE SEMICOLON
+   15      | . WHILE bool_exp DO LBRACE statms RBRACE SEMICOLON
+   16      | . BREAK SEMICOLON
+   17      | . RETURN exp SEMICOLON
+   29 ids: . ID
+   30    | . ID COMMA ids
+
+    ID      shift, and go to state 1
+    DEFINE  shift, and go to state 2
+    IF      shift, and go to state 42
+    WHILE   shift, and go to state 43
+    RETURN  shift, and go to state 44
+    BREAK   shift, and go to state 45
+
+    decl    go to state 46
+    statms  go to state 49
+    statm   go to state 48
+    ids     go to state 6
+
+
+State 42
+
+   13 statm: IF . bool_exp THEN LBRACE statms RBRACE SEMICOLON
+   14      | IF . bool_exp THEN LBRACE statms RBRACE ELSE LBRACE statms RBRACE SEMICOLON
+   18 bool_exp: . exp
+   19         | . bool_exp AND bool_exp
+   20         | . bool_exp OR bool_exp
+   21         | . NOT bool_exp
+   22         | . bool_exp NOT_EQUALS bool_exp
+   23         | . bool_exp GREATER bool_exp
+   24         | . bool_exp GREATER_EQUAL bool_exp
+   25         | . bool_exp LESS bool_exp
+   26         | . bool_exp LESS_EQUAL bool_exp
+   31 exp: . INT
+   32    | . FLOAT
+   33    | . STR
+   34    | . BOOL
+
+    INT    shift, and go to state 30
+    FLOAT  shift, and go to state 31
+    STR    shift, and go to state 32
+    BOOL   shift, and go to state 33
+    NOT    shift, and go to state 50
+
+    bool_exp  go to state 51
+    exp       go to state 52
+
+
+State 43
+
+   15 statm: WHILE . bool_exp DO LBRACE statms RBRACE SEMICOLON
+   18 bool_exp: . exp
+   19         | . bool_exp AND bool_exp
+   20         | . bool_exp OR bool_exp
+   21         | . NOT bool_exp
+   22         | . bool_exp NOT_EQUALS bool_exp
+   23         | . bool_exp GREATER bool_exp
+   24         | . bool_exp GREATER_EQUAL bool_exp
+   25         | . bool_exp LESS bool_exp
+   26         | . bool_exp LESS_EQUAL bool_exp
+   31 exp: . INT
+   32    | . FLOAT
+   33    | . STR
+   34    | . BOOL
+
+    INT    shift, and go to state 30
+    FLOAT  shift, and go to state 31
+    STR    shift, and go to state 32
+    BOOL   shift, and go to state 33
+    NOT    shift, and go to state 50
+
+    bool_exp  go to state 53
+    exp       go to state 52
+
+
+State 44
+
+   17 statm: RETURN . exp SEMICOLON
+   31 exp: . INT
+   32    | . FLOAT
+   33    | . STR
+   34    | . BOOL
+
+    INT    shift, and go to state 30
+    FLOAT  shift, and go to state 31
+    STR    shift, and go to state 32
+    BOOL   shift, and go to state 33
+
+    exp  go to state 54
+
+
+State 45
+
+   16 statm: BREAK . SEMICOLON
+
+    SEMICOLON  shift, and go to state 55
+
+
+State 46
+
+   12 statm: decl .
+
+    $default  reduce using rule 12 (statm)
+
+
+State 47
+
+    8 decl: ID LPAR args RPAR COLON T_VOID LBRACE statms . RBRACE SEMICOLON
+
+    RBRACE  shift, and go to state 56
+
+
+State 48
+
+    5 decl: . ids COLON type SEMICOLON
+    6     | . ids COLON type ASSIGN exp SEMICOLON
+    7     | . ID LPAR args RPAR COLON type LBRACE statms RBRACE SEMICOLON
+    8     | . ID LPAR args RPAR COLON T_VOID LBRACE statms RBRACE SEMICOLON
+    9     | . DEFINE ID type SEMICOLON
+   10 statms: . statm
+   10       | statm .  [RBRACE]
+   11       | . statm statms
+   11       | statm . statms
+   12 statm: . decl
+   13      | . IF bool_exp THEN LBRACE statms RBRACE SEMICOLON
+   14      | . IF bool_exp THEN LBRACE statms RBRACE ELSE LBRACE statms RBRACE SEMICOLON
+   15      | . WHILE bool_exp DO LBRACE statms RBRACE SEMICOLON
+   16      | . BREAK SEMICOLON
+   17      | . RETURN exp SEMICOLON
+   29 ids: . ID
+   30    | . ID COMMA ids
+
+    ID      shift, and go to state 1
+    DEFINE  shift, and go to state 2
+    IF      shift, and go to state 42
+    WHILE   shift, and go to state 43
+    RETURN  shift, and go to state 44
+    BREAK   shift, and go to state 45
+
+    $default  reduce using rule 10 (statms)
+
+    decl    go to state 46
+    statms  go to state 57
+    statm   go to state 48
+    ids     go to state 6
+
+
+State 49
+
+    7 decl: ID LPAR args RPAR COLON type LBRACE statms . RBRACE SEMICOLON
+
+    RBRACE  shift, and go to state 58
+
+
+State 50
+
+   18 bool_exp: . exp
+   19         | . bool_exp AND bool_exp
+   20         | . bool_exp OR bool_exp
+   21         | . NOT bool_exp
+   21         | NOT . bool_exp
+   22         | . bool_exp NOT_EQUALS bool_exp
+   23         | . bool_exp GREATER bool_exp
+   24         | . bool_exp GREATER_EQUAL bool_exp
+   25         | . bool_exp LESS bool_exp
+   26         | . bool_exp LESS_EQUAL bool_exp
+   31 exp: . INT
+   32    | . FLOAT
+   33    | . STR
+   34    | . BOOL
+
+    INT    shift, and go to state 30
+    FLOAT  shift, and go to state 31
+    STR    shift, and go to state 32
+    BOOL   shift, and go to state 33
+    NOT    shift, and go to state 50
+
+    bool_exp  go to state 59
+    exp       go to state 52
+
+
+State 51
+
+   13 statm: IF bool_exp . THEN LBRACE statms RBRACE SEMICOLON
+   14      | IF bool_exp . THEN LBRACE statms RBRACE ELSE LBRACE statms RBRACE SEMICOLON
+   19 bool_exp: bool_exp . AND bool_exp
+   20         | bool_exp . OR bool_exp
+   22         | bool_exp . NOT_EQUALS bool_exp
+   23         | bool_exp . GREATER bool_exp
+   24         | bool_exp . GREATER_EQUAL bool_exp
+   25         | bool_exp . LESS bool_exp
+   26         | bool_exp . LESS_EQUAL bool_exp
+
+    NOT_EQUALS     shift, and go to state 60
+    LESS           shift, and go to state 61
+    GREATER        shift, and go to state 62
+    LESS_EQUAL     shift, and go to state 63
+    GREATER_EQUAL  shift, and go to state 64
+    OR             shift, and go to state 65
+    AND            shift, and go to state 66
+    THEN           shift, and go to state 67
+
+
+State 52
+
+   18 bool_exp: exp .
+
+    $default  reduce using rule 18 (bool_exp)
+
+
+State 53
+
+   15 statm: WHILE bool_exp . DO LBRACE statms RBRACE SEMICOLON
+   19 bool_exp: bool_exp . AND bool_exp
+   20         | bool_exp . OR bool_exp
+   22         | bool_exp . NOT_EQUALS bool_exp
+   23         | bool_exp . GREATER bool_exp
+   24         | bool_exp . GREATER_EQUAL bool_exp
+   25         | bool_exp . LESS bool_exp
+   26         | bool_exp . LESS_EQUAL bool_exp
+
+    NOT_EQUALS     shift, and go to state 60
+    LESS           shift, and go to state 61
+    GREATER        shift, and go to state 62
+    LESS_EQUAL     shift, and go to state 63
+    GREATER_EQUAL  shift, and go to state 64
+    OR             shift, and go to state 65
+    AND            shift, and go to state 66
+    DO             shift, and go to state 68
+
+
+State 54
+
+   17 statm: RETURN exp . SEMICOLON
+
+    SEMICOLON  shift, and go to state 69
+
+
+State 55
+
+   16 statm: BREAK SEMICOLON .
+
+    $default  reduce using rule 16 (statm)
+
+
+State 56
+
+    8 decl: ID LPAR args RPAR COLON T_VOID LBRACE statms RBRACE . SEMICOLON
+
+    SEMICOLON  shift, and go to state 70
+
+
+State 57
+
+   11 statms: statm statms .
+
+    $default  reduce using rule 11 (statms)
+
+
+State 58
+
+    7 decl: ID LPAR args RPAR COLON type LBRACE statms RBRACE . SEMICOLON
+
+    SEMICOLON  shift, and go to state 71
+
+
+State 59
+
+   19 bool_exp: bool_exp . AND bool_exp
+   20         | bool_exp . OR bool_exp
+   21         | NOT bool_exp .  [NOT_EQUALS, LESS, GREATER, LESS_EQUAL, GREATER_EQUAL, OR, AND, THEN, DO]
+   22         | bool_exp . NOT_EQUALS bool_exp
+   23         | bool_exp . GREATER bool_exp
+   24         | bool_exp . GREATER_EQUAL bool_exp
+   25         | bool_exp . LESS bool_exp
+   26         | bool_exp . LESS_EQUAL bool_exp
+
+    $default  reduce using rule 21 (bool_exp)
+
+    Conflict between rule 21 and token NOT_EQUALS resolved as reduce (NOT_EQUALS < NOT).
+    Conflict between rule 21 and token LESS resolved as reduce (LESS < NOT).
+    Conflict between rule 21 and token GREATER resolved as reduce (GREATER < NOT).
+    Conflict between rule 21 and token LESS_EQUAL resolved as reduce (LESS_EQUAL < NOT).
+    Conflict between rule 21 and token GREATER_EQUAL resolved as reduce (GREATER_EQUAL < NOT).
+    Conflict between rule 21 and token OR resolved as reduce (OR < NOT).
+    Conflict between rule 21 and token AND resolved as reduce (AND < NOT).
+
+
+State 60
+
+   18 bool_exp: . exp
+   19         | . bool_exp AND bool_exp
+   20         | . bool_exp OR bool_exp
+   21         | . NOT bool_exp
+   22         | . bool_exp NOT_EQUALS bool_exp
+   22         | bool_exp NOT_EQUALS . bool_exp
+   23         | . bool_exp GREATER bool_exp
+   24         | . bool_exp GREATER_EQUAL bool_exp
+   25         | . bool_exp LESS bool_exp
+   26         | . bool_exp LESS_EQUAL bool_exp
+   31 exp: . INT
+   32    | . FLOAT
+   33    | . STR
+   34    | . BOOL
+
+    INT    shift, and go to state 30
+    FLOAT  shift, and go to state 31
+    STR    shift, and go to state 32
+    BOOL   shift, and go to state 33
+    NOT    shift, and go to state 50
+
+    bool_exp  go to state 72
+    exp       go to state 52
+
+
+State 61
+
+   18 bool_exp: . exp
+   19         | . bool_exp AND bool_exp
+   20         | . bool_exp OR bool_exp
+   21         | . NOT bool_exp
+   22         | . bool_exp NOT_EQUALS bool_exp
+   23         | . bool_exp GREATER bool_exp
+   24         | . bool_exp GREATER_EQUAL bool_exp
+   25         | . bool_exp LESS bool_exp
+   25         | bool_exp LESS . bool_exp
+   26         | . bool_exp LESS_EQUAL bool_exp
+   31 exp: . INT
+   32    | . FLOAT
+   33    | . STR
+   34    | . BOOL
+
+    INT    shift, and go to state 30
+    FLOAT  shift, and go to state 31
+    STR    shift, and go to state 32
+    BOOL   shift, and go to state 33
+    NOT    shift, and go to state 50
+
+    bool_exp  go to state 73
+    exp       go to state 52
+
+
+State 62
+
+   18 bool_exp: . exp
+   19         | . bool_exp AND bool_exp
+   20         | . bool_exp OR bool_exp
+   21         | . NOT bool_exp
+   22         | . bool_exp NOT_EQUALS bool_exp
+   23         | . bool_exp GREATER bool_exp
+   23         | bool_exp GREATER . bool_exp
+   24         | . bool_exp GREATER_EQUAL bool_exp
+   25         | . bool_exp LESS bool_exp
+   26         | . bool_exp LESS_EQUAL bool_exp
+   31 exp: . INT
+   32    | . FLOAT
+   33    | . STR
+   34    | . BOOL
+
+    INT    shift, and go to state 30
+    FLOAT  shift, and go to state 31
+    STR    shift, and go to state 32
+    BOOL   shift, and go to state 33
+    NOT    shift, and go to state 50
+
+    bool_exp  go to state 74
+    exp       go to state 52
+
+
+State 63
+
+   18 bool_exp: . exp
+   19         | . bool_exp AND bool_exp
+   20         | . bool_exp OR bool_exp
+   21         | . NOT bool_exp
+   22         | . bool_exp NOT_EQUALS bool_exp
+   23         | . bool_exp GREATER bool_exp
+   24         | . bool_exp GREATER_EQUAL bool_exp
+   25         | . bool_exp LESS bool_exp
+   26         | . bool_exp LESS_EQUAL bool_exp
+   26         | bool_exp LESS_EQUAL . bool_exp
+   31 exp: . INT
+   32    | . FLOAT
+   33    | . STR
+   34    | . BOOL
+
+    INT    shift, and go to state 30
+    FLOAT  shift, and go to state 31
+    STR    shift, and go to state 32
+    BOOL   shift, and go to state 33
+    NOT    shift, and go to state 50
+
+    bool_exp  go to state 75
+    exp       go to state 52
+
+
+State 64
+
+   18 bool_exp: . exp
+   19         | . bool_exp AND bool_exp
+   20         | . bool_exp OR bool_exp
+   21         | . NOT bool_exp
+   22         | . bool_exp NOT_EQUALS bool_exp
+   23         | . bool_exp GREATER bool_exp
+   24         | . bool_exp GREATER_EQUAL bool_exp
+   24         | bool_exp GREATER_EQUAL . bool_exp
+   25         | . bool_exp LESS bool_exp
+   26         | . bool_exp LESS_EQUAL bool_exp
+   31 exp: . INT
+   32    | . FLOAT
+   33    | . STR
+   34    | . BOOL
+
+    INT    shift, and go to state 30
+    FLOAT  shift, and go to state 31
+    STR    shift, and go to state 32
+    BOOL   shift, and go to state 33
+    NOT    shift, and go to state 50
+
+    bool_exp  go to state 76
+    exp       go to state 52
+
+
+State 65
+
+   18 bool_exp: . exp
+   19         | . bool_exp AND bool_exp
+   20         | . bool_exp OR bool_exp
+   20         | bool_exp OR . bool_exp
+   21         | . NOT bool_exp
+   22         | . bool_exp NOT_EQUALS bool_exp
+   23         | . bool_exp GREATER bool_exp
+   24         | . bool_exp GREATER_EQUAL bool_exp
+   25         | . bool_exp LESS bool_exp
+   26         | . bool_exp LESS_EQUAL bool_exp
+   31 exp: . INT
+   32    | . FLOAT
+   33    | . STR
+   34    | . BOOL
+
+    INT    shift, and go to state 30
+    FLOAT  shift, and go to state 31
+    STR    shift, and go to state 32
+    BOOL   shift, and go to state 33
+    NOT    shift, and go to state 50
+
+    bool_exp  go to state 77
+    exp       go to state 52
+
+
+State 66
+
+   18 bool_exp: . exp
+   19         | . bool_exp AND bool_exp
+   19         | bool_exp AND . bool_exp
+   20         | . bool_exp OR bool_exp
+   21         | . NOT bool_exp
+   22         | . bool_exp NOT_EQUALS bool_exp
+   23         | . bool_exp GREATER bool_exp
+   24         | . bool_exp GREATER_EQUAL bool_exp
+   25         | . bool_exp LESS bool_exp
+   26         | . bool_exp LESS_EQUAL bool_exp
+   31 exp: . INT
+   32    | . FLOAT
+   33    | . STR
+   34    | . BOOL
+
+    INT    shift, and go to state 30
+    FLOAT  shift, and go to state 31
+    STR    shift, and go to state 32
+    BOOL   shift, and go to state 33
+    NOT    shift, and go to state 50
+
+    bool_exp  go to state 78
+    exp       go to state 52
+
+
+State 67
+
+   13 statm: IF bool_exp THEN . LBRACE statms RBRACE SEMICOLON
+   14      | IF bool_exp THEN . LBRACE statms RBRACE ELSE LBRACE statms RBRACE SEMICOLON
+
+    LBRACE  shift, and go to state 79
+
+
+State 68
+
+   15 statm: WHILE bool_exp DO . LBRACE statms RBRACE SEMICOLON
+
+    LBRACE  shift, and go to state 80
+
+
+State 69
+
+   17 statm: RETURN exp SEMICOLON .
+
+    $default  reduce using rule 17 (statm)
+
+
+State 70
+
+    8 decl: ID LPAR args RPAR COLON T_VOID LBRACE statms RBRACE SEMICOLON .
+
+    $default  reduce using rule 8 (decl)
+
+
+State 71
+
+    7 decl: ID LPAR args RPAR COLON type LBRACE statms RBRACE SEMICOLON .
+
+    $default  reduce using rule 7 (decl)
+
+
+State 72
+
+   19 bool_exp: bool_exp . AND bool_exp
+   20         | bool_exp . OR bool_exp
+   22         | bool_exp . NOT_EQUALS bool_exp
+   22         | bool_exp NOT_EQUALS bool_exp .  [THEN, DO]
+   23         | bool_exp . GREATER bool_exp
+   24         | bool_exp . GREATER_EQUAL bool_exp
+   25         | bool_exp . LESS bool_exp
+   26         | bool_exp . LESS_EQUAL bool_exp
+
+    LESS           shift, and go to state 61
+    GREATER        shift, and go to state 62
+    LESS_EQUAL     shift, and go to state 63
+    GREATER_EQUAL  shift, and go to state 64
+    OR             shift, and go to state 65
+    AND            shift, and go to state 66
+
+    NOT_EQUALS  error (nonassociative)
+
+    $default  reduce using rule 22 (bool_exp)
+
+    Conflict between rule 22 and token NOT_EQUALS resolved as an error (%nonassoc NOT_EQUALS).
+    Conflict between rule 22 and token LESS resolved as shift (NOT_EQUALS < LESS).
+    Conflict between rule 22 and token GREATER resolved as shift (NOT_EQUALS < GREATER).
+    Conflict between rule 22 and token LESS_EQUAL resolved as shift (NOT_EQUALS < LESS_EQUAL).
+    Conflict between rule 22 and token GREATER_EQUAL resolved as shift (NOT_EQUALS < GREATER_EQUAL).
+    Conflict between rule 22 and token OR resolved as shift (NOT_EQUALS < OR).
+    Conflict between rule 22 and token AND resolved as shift (NOT_EQUALS < AND).
+
+
+State 73
+
+   19 bool_exp: bool_exp . AND bool_exp
+   20         | bool_exp . OR bool_exp
+   22         | bool_exp . NOT_EQUALS bool_exp
+   23         | bool_exp . GREATER bool_exp
+   24         | bool_exp . GREATER_EQUAL bool_exp
+   25         | bool_exp . LESS bool_exp
+   25         | bool_exp LESS bool_exp .  [NOT_EQUALS, THEN, DO]
+   26         | bool_exp . LESS_EQUAL bool_exp
+
+    OR   shift, and go to state 65
+    AND  shift, and go to state 66
+
+    LESS           error (nonassociative)
+    GREATER        error (nonassociative)
+    LESS_EQUAL     error (nonassociative)
+    GREATER_EQUAL  error (nonassociative)
+
+    $default  reduce using rule 25 (bool_exp)
+
+    Conflict between rule 25 and token NOT_EQUALS resolved as reduce (NOT_EQUALS < LESS).
+    Conflict between rule 25 and token LESS resolved as an error (%nonassoc LESS).
+    Conflict between rule 25 and token GREATER resolved as an error (%nonassoc GREATER).
+    Conflict between rule 25 and token LESS_EQUAL resolved as an error (%nonassoc LESS_EQUAL).
+    Conflict between rule 25 and token GREATER_EQUAL resolved as an error (%nonassoc GREATER_EQUAL).
+    Conflict between rule 25 and token OR resolved as shift (LESS < OR).
+    Conflict between rule 25 and token AND resolved as shift (LESS < AND).
+
+
+State 74
+
+   19 bool_exp: bool_exp . AND bool_exp
+   20         | bool_exp . OR bool_exp
+   22         | bool_exp . NOT_EQUALS bool_exp
+   23         | bool_exp . GREATER bool_exp
+   23         | bool_exp GREATER bool_exp .  [NOT_EQUALS, THEN, DO]
+   24         | bool_exp . GREATER_EQUAL bool_exp
+   25         | bool_exp . LESS bool_exp
+   26         | bool_exp . LESS_EQUAL bool_exp
+
+    OR   shift, and go to state 65
+    AND  shift, and go to state 66
+
+    LESS           error (nonassociative)
+    GREATER        error (nonassociative)
+    LESS_EQUAL     error (nonassociative)
+    GREATER_EQUAL  error (nonassociative)
+
+    $default  reduce using rule 23 (bool_exp)
+
+    Conflict between rule 23 and token NOT_EQUALS resolved as reduce (NOT_EQUALS < GREATER).
+    Conflict between rule 23 and token LESS resolved as an error (%nonassoc LESS).
+    Conflict between rule 23 and token GREATER resolved as an error (%nonassoc GREATER).
+    Conflict between rule 23 and token LESS_EQUAL resolved as an error (%nonassoc LESS_EQUAL).
+    Conflict between rule 23 and token GREATER_EQUAL resolved as an error (%nonassoc GREATER_EQUAL).
+    Conflict between rule 23 and token OR resolved as shift (GREATER < OR).
+    Conflict between rule 23 and token AND resolved as shift (GREATER < AND).
+
+
+State 75
+
+   19 bool_exp: bool_exp . AND bool_exp
+   20         | bool_exp . OR bool_exp
+   22         | bool_exp . NOT_EQUALS bool_exp
+   23         | bool_exp . GREATER bool_exp
+   24         | bool_exp . GREATER_EQUAL bool_exp
+   25         | bool_exp . LESS bool_exp
+   26         | bool_exp . LESS_EQUAL bool_exp
+   26         | bool_exp LESS_EQUAL bool_exp .  [NOT_EQUALS, THEN, DO]
+
+    OR   shift, and go to state 65
+    AND  shift, and go to state 66
+
+    LESS           error (nonassociative)
+    GREATER        error (nonassociative)
+    LESS_EQUAL     error (nonassociative)
+    GREATER_EQUAL  error (nonassociative)
+
+    $default  reduce using rule 26 (bool_exp)
+
+    Conflict between rule 26 and token NOT_EQUALS resolved as reduce (NOT_EQUALS < LESS_EQUAL).
+    Conflict between rule 26 and token LESS resolved as an error (%nonassoc LESS).
+    Conflict between rule 26 and token GREATER resolved as an error (%nonassoc GREATER).
+    Conflict between rule 26 and token LESS_EQUAL resolved as an error (%nonassoc LESS_EQUAL).
+    Conflict between rule 26 and token GREATER_EQUAL resolved as an error (%nonassoc GREATER_EQUAL).
+    Conflict between rule 26 and token OR resolved as shift (LESS_EQUAL < OR).
+    Conflict between rule 26 and token AND resolved as shift (LESS_EQUAL < AND).
+
+
+State 76
+
+   19 bool_exp: bool_exp . AND bool_exp
+   20         | bool_exp . OR bool_exp
+   22         | bool_exp . NOT_EQUALS bool_exp
+   23         | bool_exp . GREATER bool_exp
+   24         | bool_exp . GREATER_EQUAL bool_exp
+   24         | bool_exp GREATER_EQUAL bool_exp .  [NOT_EQUALS, THEN, DO]
+   25         | bool_exp . LESS bool_exp
+   26         | bool_exp . LESS_EQUAL bool_exp
+
+    OR   shift, and go to state 65
+    AND  shift, and go to state 66
+
+    LESS           error (nonassociative)
+    GREATER        error (nonassociative)
+    LESS_EQUAL     error (nonassociative)
+    GREATER_EQUAL  error (nonassociative)
+
+    $default  reduce using rule 24 (bool_exp)
+
+    Conflict between rule 24 and token NOT_EQUALS resolved as reduce (NOT_EQUALS < GREATER_EQUAL).
+    Conflict between rule 24 and token LESS resolved as an error (%nonassoc LESS).
+    Conflict between rule 24 and token GREATER resolved as an error (%nonassoc GREATER).
+    Conflict between rule 24 and token LESS_EQUAL resolved as an error (%nonassoc LESS_EQUAL).
+    Conflict between rule 24 and token GREATER_EQUAL resolved as an error (%nonassoc GREATER_EQUAL).
+    Conflict between rule 24 and token OR resolved as shift (GREATER_EQUAL < OR).
+    Conflict between rule 24 and token AND resolved as shift (GREATER_EQUAL < AND).
+
+
+State 77
+
+   19 bool_exp: bool_exp . AND bool_exp
+   20         | bool_exp . OR bool_exp
+   20         | bool_exp OR bool_exp .  [NOT_EQUALS, LESS, GREATER, LESS_EQUAL, GREATER_EQUAL, OR, THEN, DO]
+   22         | bool_exp . NOT_EQUALS bool_exp
+   23         | bool_exp . GREATER bool_exp
+   24         | bool_exp . GREATER_EQUAL bool_exp
+   25         | bool_exp . LESS bool_exp
+   26         | bool_exp . LESS_EQUAL bool_exp
+
+    AND  shift, and go to state 66
+
+    $default  reduce using rule 20 (bool_exp)
+
+    Conflict between rule 20 and token NOT_EQUALS resolved as reduce (NOT_EQUALS < OR).
+    Conflict between rule 20 and token LESS resolved as reduce (LESS < OR).
+    Conflict between rule 20 and token GREATER resolved as reduce (GREATER < OR).
+    Conflict between rule 20 and token LESS_EQUAL resolved as reduce (LESS_EQUAL < OR).
+    Conflict between rule 20 and token GREATER_EQUAL resolved as reduce (GREATER_EQUAL < OR).
+    Conflict between rule 20 and token OR resolved as reduce (%left OR).
+    Conflict between rule 20 and token AND resolved as shift (OR < AND).
+
+
+State 78
+
+   19 bool_exp: bool_exp . AND bool_exp
+   19         | bool_exp AND bool_exp .  [NOT_EQUALS, LESS, GREATER, LESS_EQUAL, GREATER_EQUAL, OR, AND, THEN, DO]
+   20         | bool_exp . OR bool_exp
+   22         | bool_exp . NOT_EQUALS bool_exp
+   23         | bool_exp . GREATER bool_exp
+   24         | bool_exp . GREATER_EQUAL bool_exp
+   25         | bool_exp . LESS bool_exp
+   26         | bool_exp . LESS_EQUAL bool_exp
+
+    $default  reduce using rule 19 (bool_exp)
+
+    Conflict between rule 19 and token NOT_EQUALS resolved as reduce (NOT_EQUALS < AND).
+    Conflict between rule 19 and token LESS resolved as reduce (LESS < AND).
+    Conflict between rule 19 and token GREATER resolved as reduce (GREATER < AND).
+    Conflict between rule 19 and token LESS_EQUAL resolved as reduce (LESS_EQUAL < AND).
+    Conflict between rule 19 and token GREATER_EQUAL resolved as reduce (GREATER_EQUAL < AND).
+    Conflict between rule 19 and token OR resolved as reduce (OR < AND).
+    Conflict between rule 19 and token AND resolved as reduce (%left AND).
+
+
+State 79
+
+    5 decl: . ids COLON type SEMICOLON
+    6     | . ids COLON type ASSIGN exp SEMICOLON
+    7     | . ID LPAR args RPAR COLON type LBRACE statms RBRACE SEMICOLON
+    8     | . ID LPAR args RPAR COLON T_VOID LBRACE statms RBRACE SEMICOLON
+    9     | . DEFINE ID type SEMICOLON
+   10 statms: . statm
+   11       | . statm statms
+   12 statm: . decl
+   13      | . IF bool_exp THEN LBRACE statms RBRACE SEMICOLON
+   13      | IF bool_exp THEN LBRACE . statms RBRACE SEMICOLON
+   14      | . IF bool_exp THEN LBRACE statms RBRACE ELSE LBRACE statms RBRACE SEMICOLON
+   14      | IF bool_exp THEN LBRACE . statms RBRACE ELSE LBRACE statms RBRACE SEMICOLON
+   15      | . WHILE bool_exp DO LBRACE statms RBRACE SEMICOLON
+   16      | . BREAK SEMICOLON
+   17      | . RETURN exp SEMICOLON
+   29 ids: . ID
+   30    | . ID COMMA ids
+
+    ID      shift, and go to state 1
+    DEFINE  shift, and go to state 2
+    IF      shift, and go to state 42
+    WHILE   shift, and go to state 43
+    RETURN  shift, and go to state 44
+    BREAK   shift, and go to state 45
+
+    decl    go to state 46
+    statms  go to state 81
+    statm   go to state 48
+    ids     go to state 6
+
+
+State 80
+
+    5 decl: . ids COLON type SEMICOLON
+    6     | . ids COLON type ASSIGN exp SEMICOLON
+    7     | . ID LPAR args RPAR COLON type LBRACE statms RBRACE SEMICOLON
+    8     | . ID LPAR args RPAR COLON T_VOID LBRACE statms RBRACE SEMICOLON
+    9     | . DEFINE ID type SEMICOLON
+   10 statms: . statm
+   11       | . statm statms
+   12 statm: . decl
+   13      | . IF bool_exp THEN LBRACE statms RBRACE SEMICOLON
+   14      | . IF bool_exp THEN LBRACE statms RBRACE ELSE LBRACE statms RBRACE SEMICOLON
+   15      | . WHILE bool_exp DO LBRACE statms RBRACE SEMICOLON
+   15      | WHILE bool_exp DO LBRACE . statms RBRACE SEMICOLON
+   16      | . BREAK SEMICOLON
+   17      | . RETURN exp SEMICOLON
+   29 ids: . ID
+   30    | . ID COMMA ids
+
+    ID      shift, and go to state 1
+    DEFINE  shift, and go to state 2
+    IF      shift, and go to state 42
+    WHILE   shift, and go to state 43
+    RETURN  shift, and go to state 44
+    BREAK   shift, and go to state 45
+
+    decl    go to state 46
+    statms  go to state 82
+    statm   go to state 48
+    ids     go to state 6
+
+
+State 81
+
+   13 statm: IF bool_exp THEN LBRACE statms . RBRACE SEMICOLON
+   14      | IF bool_exp THEN LBRACE statms . RBRACE ELSE LBRACE statms RBRACE SEMICOLON
+
+    RBRACE  shift, and go to state 83
+
+
+State 82
+
+   15 statm: WHILE bool_exp DO LBRACE statms . RBRACE SEMICOLON
+
+    RBRACE  shift, and go to state 84
+
+
+State 83
+
+   13 statm: IF bool_exp THEN LBRACE statms RBRACE . SEMICOLON
+   14      | IF bool_exp THEN LBRACE statms RBRACE . ELSE LBRACE statms RBRACE SEMICOLON
+
+    SEMICOLON  shift, and go to state 85
+    ELSE       shift, and go to state 86
+
+
+State 84
+
+   15 statm: WHILE bool_exp DO LBRACE statms RBRACE . SEMICOLON
+
+    SEMICOLON  shift, and go to state 87
+
+
+State 85
+
+   13 statm: IF bool_exp THEN LBRACE statms RBRACE SEMICOLON .
+
+    $default  reduce using rule 13 (statm)
+
+
+State 86
+
+   14 statm: IF bool_exp THEN LBRACE statms RBRACE ELSE . LBRACE statms RBRACE SEMICOLON
+
+    LBRACE  shift, and go to state 88
+
+
+State 87
+
+   15 statm: WHILE bool_exp DO LBRACE statms RBRACE SEMICOLON .
+
+    $default  reduce using rule 15 (statm)
+
+
+State 88
+
+    5 decl: . ids COLON type SEMICOLON
+    6     | . ids COLON type ASSIGN exp SEMICOLON
+    7     | . ID LPAR args RPAR COLON type LBRACE statms RBRACE SEMICOLON
+    8     | . ID LPAR args RPAR COLON T_VOID LBRACE statms RBRACE SEMICOLON
+    9     | . DEFINE ID type SEMICOLON
+   10 statms: . statm
+   11       | . statm statms
+   12 statm: . decl
+   13      | . IF bool_exp THEN LBRACE statms RBRACE SEMICOLON
+   14      | . IF bool_exp THEN LBRACE statms RBRACE ELSE LBRACE statms RBRACE SEMICOLON
+   14      | IF bool_exp THEN LBRACE statms RBRACE ELSE LBRACE . statms RBRACE SEMICOLON
+   15      | . WHILE bool_exp DO LBRACE statms RBRACE SEMICOLON
+   16      | . BREAK SEMICOLON
+   17      | . RETURN exp SEMICOLON
+   29 ids: . ID
+   30    | . ID COMMA ids
+
+    ID      shift, and go to state 1
+    DEFINE  shift, and go to state 2
+    IF      shift, and go to state 42
+    WHILE   shift, and go to state 43
+    RETURN  shift, and go to state 44
+    BREAK   shift, and go to state 45
+
+    decl    go to state 46
+    statms  go to state 89
+    statm   go to state 48
+    ids     go to state 6
+
+
+State 89
+
+   14 statm: IF bool_exp THEN LBRACE statms RBRACE ELSE LBRACE statms . RBRACE SEMICOLON
+
+    RBRACE  shift, and go to state 90
+
+
+State 90
+
+   14 statm: IF bool_exp THEN LBRACE statms RBRACE ELSE LBRACE statms RBRACE . SEMICOLON
+
+    SEMICOLON  shift, and go to state 91
+
+
+State 91
+
+   14 statm: IF bool_exp THEN LBRACE statms RBRACE ELSE LBRACE statms RBRACE SEMICOLON .
+
+    $default  reduce using rule 14 (statm)
