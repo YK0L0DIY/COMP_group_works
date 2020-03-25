@@ -122,6 +122,11 @@ exp:
         |   FLOAT
         |   STR
         |   bool_exp
+        |   exp ADD exp
+        |   exp SUB exp
+        |   exp MUL exp
+        |   exp DIV exp
+        |   LPAR exp RPAR
         ;
 
 type:
