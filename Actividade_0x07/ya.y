@@ -19,7 +19,7 @@
 %token <id>     ID
 %token <ival>   BOOL
 
-%token SEMICOLON QUOTE
+%token SEMICOLON
 %token DOT COMMA COLON
 
 %nonassoc NOT_EQUALS EQUALS
@@ -53,6 +53,8 @@
 
 %right POW
 
+%left NEG
+
 %nonassoc LPAR RPAR
 %nonassoc LBRACK RBRACK
 %nonassoc LBRACE RBRACE
@@ -74,8 +76,8 @@ decl:   //Variables
         |   ids COLON type ASSIGN exp SEMICOLON
 
         //Functions
+        |   ID LPAR RPAR COLON type LBRACE statms RBRACE SEMICOLON
         |   ID LPAR args RPAR COLON type LBRACE statms RBRACE SEMICOLON
-        |   ID LPAR args RPAR COLON T_VOID LBRACE statms RBRACE SEMICOLON
 
         //Define
         |   DEFINE ID type SEMICOLON
@@ -113,8 +115,8 @@ args:
         ;
 
 ids:
-          ID
-        | ID COMMA ids
+            ID
+        |   ID COMMA ids
         ;
 
 exp:
@@ -126,7 +128,13 @@ exp:
         |   exp SUB exp
         |   exp MUL exp
         |   exp DIV exp
+        |   exp POW exp
+        |   exp MOD exp
         |   LPAR exp RPAR
+        |   SUB exp %prec NEG
+        |   ID LPAR RPAR
+        |   ID LPAR args RPAR
+        |   exp ASSIGN exp
         ;
 
 type:
@@ -134,6 +142,9 @@ type:
         |   T_FLOAT
         |   T_STR
         |   T_BOOL
+        |   T_VOID
+        |   ID
+        |   type LBRACK INT LBRACK
         ;
 
 %%

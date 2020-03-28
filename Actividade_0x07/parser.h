@@ -85,12 +85,13 @@ extern int yydebug;
     MUL = 295,
     MOD = 296,
     POW = 297,
-    LPAR = 298,
-    RPAR = 299,
-    LBRACK = 300,
-    RBRACK = 301,
-    LBRACE = 302,
-    RBRACE = 303
+    NEG = 298,
+    LPAR = 299,
+    RPAR = 300,
+    LBRACK = 301,
+    RBRACK = 302,
+    LBRACE = 303,
+    RBRACE = 304
   };
 #endif
 /* Tokens.  */
@@ -134,12 +135,13 @@ extern int yydebug;
 #define MUL 295
 #define MOD 296
 #define POW 297
-#define LPAR 298
-#define RPAR 299
-#define LBRACK 300
-#define RBRACK 301
-#define LBRACE 302
-#define RBRACE 303
+#define NEG 298
+#define LPAR 299
+#define RPAR 300
+#define LBRACK 301
+#define RBRACK 302
+#define LBRACE 303
+#define RBRACE 304
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -153,7 +155,7 @@ union YYSTYPE
     char *sval;
     char *id;
 
-#line 157 "parser.h" /* yacc.c:1909  */
+#line 159 "parser.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
