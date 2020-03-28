@@ -77,7 +77,7 @@ decl:   //Variables
 
         //Functions
         |   ID LPAR RPAR COLON type LBRACE statms RBRACE SEMICOLON
-        |   ID LPAR args RPAR COLON type LBRACE statms RBRACE SEMICOLON
+        |   ID LPAR argdefs RPAR COLON type LBRACE statms RBRACE SEMICOLON
 
         //Define
         |   DEFINE ID type SEMICOLON
@@ -90,28 +90,23 @@ statms:
 
 statm:
             decl
-        |   IF bool_exp THEN LBRACE statms RBRACE SEMICOLON
-        |   IF bool_exp THEN LBRACE statms RBRACE ELSE LBRACE statms RBRACE SEMICOLON
-        |   WHILE bool_exp DO LBRACE statms RBRACE SEMICOLON
+        |   exp SEMICOLON
+        |   IF exp THEN LBRACE statms RBRACE SEMICOLON
+        |   IF exp THEN LBRACE statms RBRACE ELSE LBRACE statms RBRACE SEMICOLON
+        |   WHILE exp DO LBRACE statms RBRACE SEMICOLON
         |   BREAK SEMICOLON
         |   RETURN exp SEMICOLON
+        |   NEXT
         ;
 
-bool_exp:
-            BOOL
-        |   bool_exp AND bool_exp
-        |   bool_exp OR bool_exp
-        |   NOT bool_exp
-        |   bool_exp NOT_EQUALS bool_exp
-        |   bool_exp GREATER bool_exp
-        |   bool_exp GREATER_EQUAL bool_exp
-        |   bool_exp LESS bool_exp
-        |   bool_exp LESS_EQUAL bool_exp
+argdefs:
+            ID COLON type
+        |   ID COLON type COMMA argdefs
         ;
 
 args:
-            ID COLON type
-        |   ID COLON type COMMA args
+            exp
+        |   exp COMMA args
         ;
 
 ids:
@@ -119,17 +114,35 @@ ids:
         |   ID COMMA ids
         ;
 
-exp:
+lit:
             INT
         |   FLOAT
         |   STR
-        |   bool_exp
+        |   BOOL
+        ;
+
+exp:
+            lit
+        |   ID
+        |   exp LBRACK INT RBRACK
         |   exp ADD exp
         |   exp SUB exp
         |   exp MUL exp
         |   exp DIV exp
         |   exp POW exp
         |   exp MOD exp
+
+        //logical
+        |   exp AND exp
+        |   exp OR exp
+        |   NOT exp
+        |   exp EQUALS exp
+        |   exp NOT_EQUALS exp
+        |   exp GREATER exp
+        |   exp GREATER_EQUAL exp
+        |   exp LESS exp
+        |   exp LESS_EQUAL exp
+
         |   LPAR exp RPAR
         |   SUB exp %prec NEG
         |   ID LPAR RPAR
