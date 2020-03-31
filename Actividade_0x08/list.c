@@ -2,7 +2,6 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include "list.h"
-#include "ST.h"
 
 /*
 	node:

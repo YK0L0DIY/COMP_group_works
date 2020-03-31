@@ -19,6 +19,8 @@ struct st_data_ {
 
 typedef struct st_data_ *ST_Data;
 
+/*############## ST_Data interface ##############*/
+
 /* Insere um novo nome (ID) na ST */
 int ST_insert(char *id, ST_Data data);
 

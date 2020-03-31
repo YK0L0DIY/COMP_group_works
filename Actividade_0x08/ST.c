@@ -1,4 +1,7 @@
-#include "ST.h"
+
+#include "list.h"
+
+list *scope_list = list_new();
 
 /* Insere um novo nome (ID) na ST */
 int ST_insert(char *id, ST_Data data) {
@@ -19,9 +22,13 @@ ST_Data ST_lookup_local(char *id) {
 na função */
 int ST_new_scope() {
 
+    list_insert(scope_list, hash_new());
+
 }
 
 /* Descarta o último scope - à saída da função */
 int ST_discard() {
+
+    list_remove(scope_list, scope_list->head);
 
 }

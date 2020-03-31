@@ -23,7 +23,7 @@ unsigned int hash(char *str) {
     return hash;
 }
 
-hash_table create_hash() {
+hash_table hash_new() {
 
     hash_table to_return = (hash_table) malloc(sizeof(hash_element) * HASH_SIZE);
 
@@ -34,7 +34,7 @@ hash_table create_hash() {
     return to_return;
 }
 
-int destroy_hash(hash_table hash_table) {
+int hash_destroy(hash_table hash_table) {
 
     for (int i = 0; i < HASH_SIZE; i++) {
 
@@ -47,7 +47,7 @@ int destroy_hash(hash_table hash_table) {
     return 0;
 }
 
-void insert_hash(char *id, ST_Data data, hash_table hash_table) {
+void hash_insert(char *id, ST_Data data, hash_table hash_table) {
 
     hash_element *new_element = (hash_element*) malloc(sizeof(hash_element));
 
@@ -60,7 +60,7 @@ void insert_hash(char *id, ST_Data data, hash_table hash_table) {
 
 }
 
-int remove_hash(char *id, hash_table hash_table) {
+int hash_remove(char *id, hash_table hash_table) {
 
     int index = hash(id);
 

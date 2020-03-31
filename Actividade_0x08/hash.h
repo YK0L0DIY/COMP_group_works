@@ -14,10 +14,12 @@ typedef struct hash_element {
 
 }hash_element;
 
-int getClosestPrime(int number);
-
 unsigned int hash(char *str);
 
-void insert_hash(char *id, ST_Data data, hash_table hash_table);
+hash_table hash_new();
 
-int remove_hash(char *id, hash_table hash_table);
+int hash_destroy(hash_table hash_table);
+
+void hash_insert(char *id, ST_Data data, hash_table hash_table);
+
+int hash_remove(char *id, hash_table hash_table);
