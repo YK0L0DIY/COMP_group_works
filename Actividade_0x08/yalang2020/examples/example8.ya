@@ -1,0 +1,18 @@
+global1 : int;
+global2 : string;
+global3 : int[20];
+a,b,c : int = 1;
+
+func() : int {
+   a : int = 1;
+   b : string = "hello, world!";
+
+   global3[0] = 1;
+   global3[3] = 25;
+   
+   print(b);
+   print("var global3[3]==");
+   print(global3[3]);
+
+   return(a+1);
+}

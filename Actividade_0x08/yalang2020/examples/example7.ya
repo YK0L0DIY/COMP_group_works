@@ -1,0 +1,11 @@
+global1 : int;
+global2 : string;
+
+func() : int {
+   a : int = 1;
+   b : string = "hello, world!";
+
+   print(b);
+
+   return(a+1);
+}

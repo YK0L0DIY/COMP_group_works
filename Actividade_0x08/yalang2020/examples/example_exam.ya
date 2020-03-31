@@ -1,0 +1,26 @@
+r : int = 1;
+  
+f (n: int) : int {
+  if (n <= 10) then {
+    return r;
+  } else {
+    return n - 10 - r;
+  };
+};
+
+g (n: int) : int {
+  return -(n^2 * r);
+};
+  
+main () : void {
+  a,b : int;
+
+  print("Introduza um inteiro:");
+  input(b);
+
+  r = b % 2;
+  
+  a = f(g(b), b = g(12), b);
+
+  print(a);
+};
