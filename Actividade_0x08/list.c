@@ -127,6 +127,20 @@ int list_find(struct list *list, hash_table hash_table) {
 	return (node == NULL ? -1 : index);
 }
 
+ST_Data list_find_id(struct list *list, char *id) {
+
+    node *node = list->head;
+    int index = hash(id);
+
+    while(node != NULL && (strcmp(node->element[index]->id, id) != 0)) {
+
+        node = node->next;
+
+    }
+
+    return node->element[index]->data;
+}
+
 /*
 	list_print:
 		Prints the element of the node, passes to next and does the same. Repeats until it finds one that is NULL.
