@@ -4,7 +4,8 @@
  * Copiadas as implementações usadas por um dos membros do grupo (l39873, Eduardo Medeiros) no trabalho E.
  *
  */
-
+#include <stdlib.h>
+#include <string.h>
 #include "hash.h"
 
 /*
@@ -22,49 +23,33 @@ unsigned int hash(char *str) {
     return hash;
 }
 
+hash_table create_hash() {
 
-/*
-    getClosestPrime:
-        Given a certain number, returns the next bigger prime number.
+    hash_table to_return = (hash_table) malloc(sizeof(hash_element) * HASH_SIZE);
 
-        args:
-            number - the number given to get the closest prime.
-
-        return:
-            The closest bigger prime to number.
-*/
-int getClosestPrime(int number) {
-
-    number++;
-
-    for (int i = 2; i < number; i++) {
-
-        if (number % i == 0) {
-
-            number++;
-            i = 2;
-
-        } else {
-
-            continue;
-        }
+    for (int i = 0; i < HASH_SIZE; i++) {
+        to_return[i] = NULL;
     }
 
-    return number;
+    return to_return;
 }
 
 int destroy_hash(hash_table hash_table) {
 
-    for (int i = 0; i < sizeof(*hash_table); i++) {
-        free(hash_table[i]);
+    for (int i = 0; i < HASH_SIZE; i++) {
+
+        if(hash_table[i]) {
+
+            free(hash_table[i]);
+        }
     }
 
     return 0;
 }
 
-void insert_hash(char *id, SD_Data data, hash_table hash_table) {
+void insert_hash(char *id, ST_Data data, hash_table hash_table) {
 
-    hash_element *new_element = malloc(sizeof(hash_element));
+    hash_element *new_element = (hash_element*) malloc(sizeof(hash_element));
 
     new_element->id = strdup(id);
     new_element->data = data;

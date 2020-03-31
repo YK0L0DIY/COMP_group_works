@@ -2,17 +2,25 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include "list.h"
-#include "hash.h"
+#include "ST.h"
 
 /*
 	node:
 		has the content of the node and the reference for the next node.
 */
 typedef struct node {
-	hash_table scope;
+	hash_table element;
 	struct node *next;
-	struct node *prev;
 } node;
+
+
+/*
+    list:
+        the list is represented by the head node, only has the pointer to the head node.
+*/
+struct list {
+    node *head;
+};
 
 /*
 	node_new:
@@ -26,19 +34,10 @@ static node *node_new(hash_table hash_table, node *next) {
 
 		node -> element = hash_table;
 		node -> next = next;
-		node -> prev = NULL;
 	}
 
 	return node;
 }
-
-/*
-	list:
-		the list is represented by the head node, only has the pointer to the head node.
-*/
-struct list {
-	node *head;
-};
 
 /*
 	list_new:
@@ -69,14 +68,13 @@ bool list_empty(struct list *list) {
 */
 bool list_insert(struct list *list, hash_table hash_table) {
 
-	node *node = node_new(hash_table, list -> head);
+	node *node = node_new(hash_table, list->head);
 
 	if (node == NULL) {
 		free(node);
 		return false;
 	}
 
-	list -> head -> prev = node;
 	list -> head = node;
 
 	return true;
@@ -92,7 +90,7 @@ void list_remove(struct list *list, hash_table hash_table) {
     struct node *prevNode = list -> head;
     int counter = 0;
 
-    while (node -> next != NULL && node->scope != hash_table) {
+    while (node -> next != NULL && node->element != hash_table) {
 
         node = node -> next;
 
@@ -104,12 +102,10 @@ void list_remove(struct list *list, hash_table hash_table) {
     if(counter == 0) {
 
         list -> head = node -> next;
-        node -> next -> prev = NULL;
 
     } else {
 
         prevNode -> next = node -> next;
-        node -> next -> prev = prevNode;
     }
     free(node);
 }
@@ -118,14 +114,14 @@ void list_remove(struct list *list, hash_table hash_table) {
 	list_find:
 		Searches the values passed on the list. If not found returns -1.
 */
-int list_find(struct list *list, int value) {
+int list_find(struct list *list, hash_table hash_table) {
 
-	node *node = list -> head;
+	node *node = list->head;
 	int index = 0;
 
-	while(node != NULL && node -> element != value) {
+	while(node != NULL && node->element != hash_table) {
 
-		node = node -> next;
+		node = node->next;
 		index++;
 	}
 
@@ -141,8 +137,11 @@ void list_print(struct list *list) {
 	node *node = list -> head;
 
 	while (node != NULL) {
-		printf("%d ", node -> element);
-		node = node -> next;
+
+        for (int i = 0; i < HASH_SIZE; i++) {
+            printf("%s ", node->element[i]->id);
+        }
+        node = node -> next;
 	}
 }
 
@@ -152,7 +151,7 @@ void list_print(struct list *list) {
 */
 void list_destroy(struct list *list) {
 
-	node *node = list -> head;
+	node *node = list->head;
 	struct node *temp;
 
 	while (node != NULL) {
