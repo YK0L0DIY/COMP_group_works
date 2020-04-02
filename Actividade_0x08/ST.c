@@ -1,7 +1,7 @@
 
 #include "list.h"
 
-list *scope_list = list_new();
+list *scope_list = NULL;
 
 /* Insere um novo nome (ID) na ST */
 int ST_insert(char *id, ST_Data data) {
@@ -28,6 +28,10 @@ ST_Data ST_lookup_local(char *id) {
 /* Cria um novo âmbito (scope ou environment) local - à entrada
 na função */
 int ST_new_scope() {
+
+    if(scope_list == NULL) {
+        scope_list = list_new();
+    }
 
     list_insert(scope_list, hash_new());
 
