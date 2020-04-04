@@ -23,14 +23,55 @@ struct t_decl_ {
 
     union {
 
-        ids id_list;
-        type
+        t_ids id_list;
+        t_type type;
+        t_exp exp;
+        char *id;
+        t_stms stms;
+        t_argdefs argdefs;
 
     }u;
 };
 
-typedef ids_ *ids;
-struct ids_ {
+typedef t_argdefs_ *t_argdefs;
+struct t_argdefs_ {
+
+    enum {
+        ARGDEFS_SINGLE,
+        ARGDEFS_LIST
+    } kind;
+
+    union {
+
+        t_argdef argdef;
+        t_argdefs argdefs;
+    }u;
+};
+
+typedef t_argdef_ *t_argdef;
+struct t_argdef_ {
+
+    char *id;
+    t_type type;
+};
+
+typedef t_args_ *t_args;
+struct t_args_ {
+
+    enum {
+        ARGS_SINGLE,
+        ARGS_LIST
+    } kind;
+
+    union {
+
+        t_exp exp;
+        t_args args;
+    }u;
+};
+
+typedef t_ids_ *t_ids;
+struct t_ids_ {
 
     enum {
         ID_SINGLE,
@@ -40,15 +81,44 @@ struct ids_ {
     union {
 
         char *id;
-        ids id_list;
+        t_ids id_list;
 
     }u;
+};
+
+typedef t_type_ *t_type;
+struct t_type_ {
+
+    enum {
+        TYPE_T_INT,
+        TYPE_T_FLOAT,
+        TYPE_T_STRING,
+        TYPE_T_BOOL,
+        TYPE_T_VOID,
+        TYPE_ID,
+        TYPE_ARRAY
+    } kind;
+
+    union {
+
+        char *type;
+        char *id;
+        t_type type;
+        int intlit;
+
+    }u;
+
 };
 
 typedef t_lit_ *t_lit;
 struct t_lit_ {
 
-    enum {LIT_INTLIT, LIT_FLOATLIT, LIT_STRLIT, LIT_BOOLLIT} kind;
+    enum {
+        LIT_INTLIT,
+        LIT_FLOATLIT,
+        LIT_STRLIT,
+        LIT_BOOLLIT
+    } kind;
 
     union {
         int intlit;
