@@ -86,6 +86,45 @@ struct t_ids_ {
     }u;
 };
 
+typedef t_stms_ *t_stms;
+struct t_stms_ {
+
+    enum {
+        STMS_SINGLE,
+        STMS_LIST
+    } kind;
+
+    union {
+
+        t_stm stm;
+        t_stms stms;
+    }u;
+};
+
+typedef t_stm_ *t_stm;
+struct t_stm_ {
+
+    enum {
+        STM_DECL,
+        STM_EXP,
+        STM_RETURN,
+        STM_IF_THEN,
+        STM_IF_THEN_ELSE,
+        STM_WHILE
+    } kind;
+
+    union {
+
+        t_decl decl;
+
+        t_exp exp;
+
+        t_stms stms;
+        t_stms else_stms;
+
+    }u;
+};
+
 typedef t_type_ *t_type;
 struct t_type_ {
 
