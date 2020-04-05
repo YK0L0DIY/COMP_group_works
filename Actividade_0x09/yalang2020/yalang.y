@@ -18,8 +18,12 @@ void yyerror (char const *);
     char   *str;
 
     t_decls decls;
-    t_exp exp;
+    t_stms stms;
+    t_stm stm;
+    t_type type;
     t_lit lit;
+    t_exp exp;
+
 }
 
 /* Bison declarations.  */
@@ -54,9 +58,12 @@ void yyerror (char const *);
 %nonassoc		LSBRACE RSBRACE
 %nonassoc		LPAR RPAR
 
-%type <decls>   decls
-%type <exp>   exp
-%type <lit>   lit
+%type 	<decls>		decls
+%type	<stms>		stms
+%type	<stm>		stm
+%type	<type>		type
+%type 	<lit>   	lit
+%type 	<exp>   	exp
 
 %%
 
@@ -90,17 +97,17 @@ ids:     	    ID
         |	    ID COMMA ids
                 ;
 
-stms:    	    stm
-        |	    stm stms
+stms:    	    stm		{$$ = t_stms t_stms_new($1, NULL);}
+        |	    stm stms	{$$ = t_stms t_stms_new($1, $2);}
                 ;
 
-stm:     	    decl
-        |	    exp SEMI
-        |	    RETURN exp SEMI
-        |	    IF exp THEN LCBRACE stms RCBRACE SEMI
-        |	    IF exp THEN LCBRACE stms RCBRACE ELSE LCBRACE stms RCBRACE SEMI
-        |	    WHILE exp DO LCBRACE stms RCBRACE SEMI
-        |       NEXT
+stm:     	    decl								{$$ = t_stm t_stm_new_decl($1);}
+        |	    exp SEMI								{$$ = t_stm t_stm_new_exp($1);}
+        |	    RETURN exp SEMI							{$$ = t_stm t_stm_new_return($2);}
+        |	    IF exp THEN LCBRACE stms RCBRACE SEMI				{$$ = t_stm t_stm_new_if_else($2,$5,NULL);}
+        |	    IF exp THEN LCBRACE stms RCBRACE ELSE LCBRACE stms RCBRACE SEMI	{$$ = t_stm t_stm_new_if_else($2,$5,$9);}
+        |	    WHILE exp DO LCBRACE stms RCBRACE SEMI				{$$ = t_stm t_stm_new_while($2,$5);}
+        |           NEXT								{$$ = t_stm t_stm_new_next();}
                 ;
 
 type:    	    T_INT 			 {$$ = t_type_new_type(0,$1);}

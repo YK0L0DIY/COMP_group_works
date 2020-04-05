@@ -128,7 +128,8 @@ struct t_stm_ {
         STM_RETURN,
         STM_IF_THEN,
         STM_IF_THEN_ELSE,
-        STM_WHILE
+        STM_WHILE,
+        STM_NEXT
     } kind;
 
     union {
@@ -254,7 +255,44 @@ struct t_exp_ {
 
 //Functions
 
+//t_stms
+
+t_stms t_stms_new(t_stm stm, t_stms stms);
+
+//t_stm
+
+t_stm t_stm_new_decl(t_decl decl);
+
+t_stm t_stm_new_exp(t_exp exp);
+
+t_stm t_stm_new_return(t_exp exp);
+
+t_stm t_stm_new_if_else(t_exp exp, t_stms then_stms, t_stms else_stms);
+
+t_stm t_stm_new_while(t_exp exp, t_stms while_stms);
+
+t_stm t_stm_new_next();
+
+//t_type
+
+t_type t_type_new_type(int kind, char *type);
+
+t_type t_type_new_id(char *id);
+
+t_type t_type_new_array(t_type type, int intlit);
+
+//t_lit
+
+t_lit t_lit_new_intlit(int intlit);
+
+t_lit t_lit_new_floatlit(double floatlit);
+
+t_lit t_lit_new_strlit(char *srtlit);
+
+t_lit t_lit_new_boollit(int boollit);
+
 //t_exp
+
 t_decls t_decls_new(t_decl decl, t_decls decls);
 
 t_exp t_exp_new_binop(char op[], t_exp arg1, t_exp arg2);
@@ -270,19 +308,3 @@ t_exp t_exp_new_id(char *id);
 t_exp t_exp_new_array(t_exp exp, int intlit);
 
 t_exp t_exp_new_function(char *id, t_args args);
-
-//t_lit
-t_lit t_lit_new_intlit(int intlit);
-
-t_lit t_lit_new_floatlit(double floatlit);
-
-t_lit t_lit_new_strlit(char *srtlit);
-
-t_lit t_lit_new_boollit(int boollit);
-
-//t_type
-t_type t_type_new_type(int kind, char *type);
-
-t_type t_type_new_id(char *id);
-
-t_type t_type_new_array(t_type type, int intlit);

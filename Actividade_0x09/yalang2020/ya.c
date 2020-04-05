@@ -3,9 +3,12 @@
 #include <string.h>
 
 //Functions
+
+//t_decls
+
 t_decls t_decls_new(t_decl decl, t_decls decls) {
 
-    t_decls to_return = (t_decls *) malloc(sizeof(struct t_decls_));
+    t_decls to_return = (t_decls) malloc(sizeof(*t_decls));
 
     to_return->u.decl = decl;
     to_return->u.decls = decls;
@@ -22,6 +25,170 @@ t_decls t_decls_new(t_decl decl, t_decls decls) {
 
     return to_return;
 }
+
+//t_stms
+
+t_stms t_stms_new(t_stm stm, t_stms stms) {
+
+    t_stms to_return = (t_stms) malloc(sizeof(t_stms));
+
+    to_return->u.stm = stm;
+    to_return->u.stms = stms;
+
+    if(stms) {
+
+        to_return->kind = STMS_SINGLE;
+
+    } else {
+        to_return->kind = STMS_LIST;
+
+    }
+
+    return to_return;
+}
+
+//t_stm
+
+t_stm t_stm_new_decl(t_decl decl) {
+
+    t_stm  to_return = (t_stm) malloc(sizeof(*t_stm));
+
+    to_return->kind = STM_DECL;
+    to_return->u.stm_decl.decl = decl;
+
+    return to_return;
+}
+
+t_stm t_stm_new_exp(t_exp exp) {
+
+    t_stm  to_return = (t_stm) malloc(sizeof(*t_stm));
+
+    to_return->kind = STM_EXP;
+    to_return->u.stm_exp.exp = exp;
+
+    return to_return;
+}
+
+t_stm t_stm_new_return(t_exp exp) {
+
+    t_stm  to_return = (t_stm) malloc(sizeof(*t_stm));
+
+    to_return->kind = STM_RETURN;
+    to_return->u.stm_decl.decl = decl;
+
+    return to_return;
+}
+
+t_stm t_stm_new_if_else(t_exp exp, t_stms then_stms, t_stms else_stms) {
+
+    t_stm  to_return = (t_stm) malloc(sizeof(*t_stm));
+
+    to_return->u.stm_if_else.exp = exp;
+    to_return->u.stm_if_else.then_stms = then_stms;
+    to_return->u.stm_if_else.else_stms = else_stms;
+
+    if(else_stms) {
+
+        to_return->kind = STM_IF_THEN_ELSE;
+
+    } else {
+
+        to_return->kind = STM_IF_THEN;
+    }
+
+    return to_return;
+}
+
+t_stm t_stm_new_while(t_exp exp, t_stms while_stms) {
+
+    t_stm  to_return = (t_stm) malloc(sizeof(*t_stm));
+
+    to_return->kind = STM_WHILE;
+
+    to_return->u.stm_while.exp = exp;
+    to_return->u.stm_while.while_stms = while_stms;
+
+    return to_return;
+}
+
+t_stm t_stm_new_next() {
+
+    t_stm  to_return = (t_stm) malloc(sizeof(*t_stm));
+
+    to_return->kind = STM_NEXT;
+
+    return to_return;
+}
+
+//t_type
+
+t_type t_type_new_type(int kind, char *type) {
+    t_type to_return = (t_type) malloc(sizeof(*t_type));
+
+    to_return->kind = kind;
+    strcpy(to_return->u.type, type);
+
+    return to_return;
+}
+
+t_type t_type_new_id(char *id) {
+    t_type to_return = (t_type) malloc(sizeof(*t_type));
+
+    to_return->kind = TYPE_ID;
+    strcpy(to_return->u.id, id);
+
+    return to_return;
+}
+
+t_type t_type_new_array(t_type type, int intlit) {
+    t_type to_return = (t_type) malloc(sizeof(*t_type));
+
+    to_return->kind = TYPE_ARRAY;
+    to_return->u.array.type = type;
+    to_return->u.array.intlit = intlit;
+
+    return to_return;
+}
+
+//t_lit
+
+t_lit t_lit_new_intlit(int intlit) {
+    t_lit to_return = (t_lit) malloc(sizeof(*t_lit));
+
+    to_return->kind = LIT_INTLIT;
+    to_return->u.intlit = intlit;
+
+    return to_return;
+}
+
+t_lit t_lit_new_floatlit(double floatlit) {
+    t_lit to_return = (t_lit) malloc(sizeof(*t_lit));
+
+    to_return->kind = LIT_FLOATLIT;
+    to_return->u.floatlit = floatlit;
+
+    return to_return;
+}
+
+t_lit t_lit_new_strlit(char *srtlit) {
+    t_lit to_return = (t_lit) malloc(sizeof(*t_lit));
+
+    to_return->kind = LIT_STRLIT;
+    strcpy(to_return->u.strlit.strlit);
+
+    return to_return;
+}
+
+t_lit t_lit_new_boollit(int boollit) {
+    t_lit to_return = (t_lit) malloc(sizeof(*t_lit));
+
+    to_return->kind = LIT_BOOLLIT;
+    to_return->u.boollit = boollit;
+
+    return to_return;
+}
+
+//t_exp
 
 t_exp t_exp_new_binop(char op[], t_exp arg1, t_exp arg2) {
 
@@ -92,70 +259,6 @@ t_exp t_exp_new_function(char *id, t_args args) {
     to_return->kind = EXP_FUNC;
     to_return->u.func.args = args;
     strcpy(to_return->u.func.id, id);
-
-    return to_return;
-}
-
-t_lit t_lit_new_intlit(int intlit) {
-    t_lit to_return = (t_lit) malloc(sizeof(*t_lit));
-
-    to_return->kind = LIT_INTLIT;
-    to_return->u.intlit = intlit;
-
-    return to_return;
-}
-
-t_lit t_lit_new_floatlit(double floatlit) {
-    t_lit to_return = (t_lit) malloc(sizeof(*t_lit));
-
-    to_return->kind = LIT_FLOATLIT;
-    to_return->u.floatlit = floatlit;
-
-    return to_return;
-}
-
-t_lit t_lit_new_strlit(char *srtlit) {
-    t_lit to_return = (t_lit) malloc(sizeof(*t_lit));
-
-    to_return->kind = LIT_STRLIT;
-    strcpy(to_return->u.strlit.strlit);
-
-    return to_return;
-}
-
-t_lit t_lit_new_boollit(int boollit) {
-    t_lit to_return = (t_lit) malloc(sizeof(*t_lit));
-
-    to_return->kind = LIT_BOOLLIT;
-    to_return->u.boollit = boollit;
-
-    return to_return;
-}
-
-t_type t_type_new_type(int kind, char *type) {
-    t_type to_return = (t_type) malloc(sizeof(*t_type));
-
-    to_return->kind = kind;
-    strcpy(to_return->u.type, type);
-
-    return to_return;
-}
-
-t_type t_type_new_id(char *id) {
-    t_type to_return = (t_type) malloc(sizeof(*t_type));
-
-    to_return->kind = TYPE_ID;
-    strcpy(to_return->u.id, id);
-
-    return to_return;
-}
-
-t_type t_type_new_array(t_type type, int intlit) {
-    t_type to_return = (t_type) malloc(sizeof(*t_type));
-
-    to_return->kind = TYPE_ARRAY;
-    to_return->u.array.type = type;
-    to_return->u.array.intlit = intlit;
 
     return to_return;
 }
