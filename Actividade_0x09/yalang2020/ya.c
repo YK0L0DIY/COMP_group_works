@@ -26,6 +26,51 @@ t_decls t_decls_new(t_decl decl, t_decls decls) {
     return to_return;
 }
 
+//t_decl
+
+t_decl t_decl_new_init(t_ids id_list, t_type type) {
+    t_decl to_return = (t_decl) malloc(sizeof(*t_decl));
+
+    to_return->kind = DECL_INIT;
+    to_return->u.init.id_list = id_list;
+    to_return->u.init.type = type;
+
+    return to_return;
+}
+
+t_decl t_decl_new_assign(t_ids id_list, t_type type, t_exp exp) {
+    t_decl to_return = (t_decl) malloc(sizeof(*t_decl));
+
+    to_return->kind = DECL_ASSIGN;
+    to_return->u.assign.id_list = id_list;
+    to_return->u.assign.type = type;
+    to_return->u.assign.exp = exp;
+
+    return to_return;
+}
+
+t_decl t_decl_new_func(char *id, t_argdefs argdefs, t_type type, t_stms stms) {
+    t_decl to_return = (t_decl) malloc(sizeof(*t_decl));
+
+    to_return->kind = DECL_FUNC;
+    strcpy(to_return->u.func.id, id);
+    to_return->u.func.type = type;
+    to_return->u.func.argdefs = argdefs;
+    to_return->u.func.stms = stms;
+
+    return to_return;
+}
+
+t_decl t_decl_new_define(char *id, t_type type) {
+    t_decl to_return = (t_decl) malloc(sizeof(*t_decl));
+
+    to_return->kind = DECL_DEFINE;
+    strcpy(to_return->u.define.id, id);
+    to_return->u.define.type = type;
+
+    return to_return
+}
+
 //t_argdefs
 
 t_argdefs t_argdefs_new(t_argdef argdef, t_argdefs argdefs) {
@@ -35,7 +80,7 @@ t_argdefs t_argdefs_new(t_argdef argdef, t_argdefs argdefs) {
     to_return->u.argdef = argdef;
     to_return->u.argdefs = argdefs;
 
-    if(argdefs) {
+    if (argdefs) {
         to_return->kind = ARGDEFS_LIST;
     } else {
         to_return->kind = ARGDEFS_SINGLE;
@@ -50,7 +95,7 @@ t_argdef t_argdef_new(char *id, t_type type) {
 
     t_argdef to_return = (t_argdef) malloc(sizeof(*t_argdef));
 
-    strcpy(to_return->id,id);
+    strcpy(to_return->id, id);
     to_return->type = type;
 
     return to_return;
@@ -65,10 +110,10 @@ t_args t_args_new(t_exp exp, t_args args) {
     to_return->u.exp = exp;
     to_return->u.args = args;
 
-    if(args) {
+    if (args) {
         to_return->kind = ARGS_LIST;
 
-    }else{
+    } else {
         to_return->kind = ARGS_SINGLE;
     }
 
@@ -84,7 +129,7 @@ t_ids t_ids_new(char *id, t_ids id_list) {
     strcpy(to_return->u.id, id);
     to_return->u.id_list;
 
-    if(id_list) {
+    if (id_list) {
 
         to_return->kind = ID_LIST;
 
@@ -105,7 +150,7 @@ t_stms t_stms_new(t_stm stm, t_stms stms) {
     to_return->u.stm = stm;
     to_return->u.stms = stms;
 
-    if(stms) {
+    if (stms) {
 
         to_return->kind = STMS_SINGLE;
 
@@ -121,7 +166,7 @@ t_stms t_stms_new(t_stm stm, t_stms stms) {
 
 t_stm t_stm_new_decl(t_decl decl) {
 
-    t_stm  to_return = (t_stm) malloc(sizeof(*t_stm));
+    t_stm to_return = (t_stm) malloc(sizeof(*t_stm));
 
     to_return->kind = STM_DECL;
     to_return->u.stm_decl.decl = decl;
@@ -131,7 +176,7 @@ t_stm t_stm_new_decl(t_decl decl) {
 
 t_stm t_stm_new_exp(t_exp exp) {
 
-    t_stm  to_return = (t_stm) malloc(sizeof(*t_stm));
+    t_stm to_return = (t_stm) malloc(sizeof(*t_stm));
 
     to_return->kind = STM_EXP;
     to_return->u.stm_exp.exp = exp;
@@ -141,7 +186,7 @@ t_stm t_stm_new_exp(t_exp exp) {
 
 t_stm t_stm_new_return(t_exp exp) {
 
-    t_stm  to_return = (t_stm) malloc(sizeof(*t_stm));
+    t_stm to_return = (t_stm) malloc(sizeof(*t_stm));
 
     to_return->kind = STM_RETURN;
     to_return->u.stm_decl.decl = decl;
@@ -151,13 +196,13 @@ t_stm t_stm_new_return(t_exp exp) {
 
 t_stm t_stm_new_if_else(t_exp exp, t_stms then_stms, t_stms else_stms) {
 
-    t_stm  to_return = (t_stm) malloc(sizeof(*t_stm));
+    t_stm to_return = (t_stm) malloc(sizeof(*t_stm));
 
     to_return->u.stm_if_else.exp = exp;
     to_return->u.stm_if_else.then_stms = then_stms;
     to_return->u.stm_if_else.else_stms = else_stms;
 
-    if(else_stms) {
+    if (else_stms) {
 
         to_return->kind = STM_IF_THEN_ELSE;
 
@@ -171,7 +216,7 @@ t_stm t_stm_new_if_else(t_exp exp, t_stms then_stms, t_stms else_stms) {
 
 t_stm t_stm_new_while(t_exp exp, t_stms while_stms) {
 
-    t_stm  to_return = (t_stm) malloc(sizeof(*t_stm));
+    t_stm to_return = (t_stm) malloc(sizeof(*t_stm));
 
     to_return->kind = STM_WHILE;
 
@@ -183,7 +228,7 @@ t_stm t_stm_new_while(t_exp exp, t_stms while_stms) {
 
 t_stm t_stm_new_next() {
 
-    t_stm  to_return = (t_stm) malloc(sizeof(*t_stm));
+    t_stm to_return = (t_stm) malloc(sizeof(*t_stm));
 
     to_return->kind = STM_NEXT;
 

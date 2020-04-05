@@ -255,6 +255,20 @@ struct t_exp_ {
 
 //Functions
 
+//t_decls
+
+t_decls t_decls_new(t_decl decl, t_decls decls);
+
+//t_decl
+
+t_decl t_decl_new_init(t_ids id_list, t_type type);
+
+t_decl t_decl_new_assign(t_ids id_list, t_type type, t_exp exp);
+
+t_decl t_decl_new_func(char *id, t_argdefs argdefs, t_type type, t_stms stms);
+
+t_decl t_decl_new_define(char *id, t_type type);
+
 //t_argdefs
 
 t_argdefs t_argdefs_new(t_argdef argdef, t_argdefs argdefs);
@@ -308,8 +322,6 @@ t_lit t_lit_new_strlit(char *srtlit);
 t_lit t_lit_new_boollit(int boollit);
 
 //t_exp
-
-t_decls t_decls_new(t_decl decl, t_decls decls);
 
 t_exp t_exp_new_binop(char op[], t_exp arg1, t_exp arg2);
 
