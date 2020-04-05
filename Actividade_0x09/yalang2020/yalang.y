@@ -19,6 +19,7 @@ void yyerror (char const *);
 
     t_decls decls;
     t_exp exp;
+    t_lit lit;
 }
 
 /* Bison declarations.  */
@@ -55,6 +56,7 @@ void yyerror (char const *);
 
 %type <decls>   decls
 %type <exp>   exp
+%type <lit>   lit
 
 %%
 
@@ -110,10 +112,10 @@ type:    	    T_INT
         |	    type LSBRACE INTLIT RSBRACE
                 ;
 
-lit:     	    INTLIT
-        |	    FLOATLIT
-        |	    STRLIT
-        |	    BOOLLIT
+lit:     	    INTLIT                       {$$ = t_lit_new_intlit($1);}
+        |	    FLOATLIT                     {$$ = t_lit_new_floatlit($1);}
+        |	    STRLIT                       {$$ = t_lit_new_strlit($1);}
+        |	    BOOLLIT                      {$$ = t_lit_new_boollit($1);}
                 ;
 
 exp:     	    lit                          {$$ = t_exp_new_lit($1);}

@@ -253,6 +253,8 @@ struct t_exp_ {
 };
 
 //Functions
+
+//t_exp
 t_decls t_decls_new(t_decl decl, t_decls decls);
 
 t_exp t_exp_new_binop(char op[], t_exp arg1, t_exp arg2);
@@ -268,3 +270,12 @@ t_exp t_exp_new_id(char *id);
 t_exp t_exp_new_array(t_exp exp, int intlit);
 
 t_exp t_exp_new_function(char *id, t_args args);
+
+//t_lit
+t_lit t_lit_new_intlit(int intlit);
+
+t_lit t_lit_new_floatlit(double floatlit);
+
+t_lit t_lit_new_strlit(char *srtlit);
+
+t_lit t_lit_new_boollit(int boollit);
