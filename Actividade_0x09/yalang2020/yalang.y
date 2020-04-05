@@ -18,6 +18,10 @@ void yyerror (char const *);
     char   *str;
 
     t_decls decls;
+    t_argdefs argdefs;
+    t_argdef argdef;
+    t_args args;
+    t_ids ids;
     t_stms stms;
     t_stm stm;
     t_type type;
@@ -59,6 +63,10 @@ void yyerror (char const *);
 %nonassoc		LPAR RPAR
 
 %type 	<decls>		decls
+%type	<argdefs>	argdefs
+%type	<argdef>	argdef
+%type	<args>		args
+%type	<ids>		ids
 %type	<stms>		stms
 %type	<stm>		stm
 %type	<type>		type
@@ -82,19 +90,19 @@ decl:    	    ids COLON type SEMI
         |	    DEFINE ID type SEMI
                 ;
 
-argdefs: 	    argdef
-        |	    argdef COMMA argdefs
+argdefs: 	    argdef			{$$ = t_argdefs t_argdefs_new($1, NULL);}
+        |	    argdef COMMA argdefs	{$$ = t_argdefs t_argdefs_new($1, $3);}
                 ;
 
-argdef:  	    ID COLON type
+argdef:  	    ID COLON type	{$$ = t_argdef_new($1, $3);}
                 ;
 
-args:		    exp
-        |	    exp COMMA args
+args:		    exp			{$$ = t_args_new($1, NULL);}
+        |	    exp COMMA args	{$$ = t_args_new($1, $3);}
                 ;
 
-ids:     	    ID
-        |	    ID COMMA ids
+ids:     	    ID			{$$ = t_ids_new($1, NULL);}
+        |	    ID COMMA ids	{$$ = t_ids_new($1, $3);}
                 ;
 
 stms:    	    stm		{$$ = t_stms t_stms_new($1, NULL);}

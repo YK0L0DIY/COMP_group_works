@@ -59,7 +59,7 @@ struct t_argdefs_ {
         ARGDEFS_LIST
     } kind;
 
-    union {
+    struct {
 
         t_argdef argdef;
         t_argdefs argdefs;
@@ -81,7 +81,7 @@ struct t_args_ {
         ARGS_LIST
     } kind;
 
-    union {
+    struct {
 
         t_exp exp;
         t_args args;
@@ -96,7 +96,7 @@ struct t_ids_ {
         ID_LIST
     } kind;
 
-    union {
+    struct {
 
         char *id;
         t_ids id_list;
@@ -112,7 +112,7 @@ struct t_stms_ {
         STMS_LIST
     } kind;
 
-    union {
+    struct {
 
         t_stm stm;
         t_stms stms;
@@ -254,6 +254,22 @@ struct t_exp_ {
 };
 
 //Functions
+
+//t_argdefs
+
+t_argdefs t_argdefs_new(t_argdef argdef, t_argdefs argdefs);
+
+//t_argdef
+
+t_argdef t_argdef_new(char *id, t_type type);
+
+//t_args
+
+t_args t_args_new(t_exp exp, t_args args);
+
+//t_ids
+
+t_ids t_ids_new(char *id, t_ids id_list);
 
 //t_stms
 

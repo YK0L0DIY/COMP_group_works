@@ -26,6 +26,76 @@ t_decls t_decls_new(t_decl decl, t_decls decls) {
     return to_return;
 }
 
+//t_argdefs
+
+t_argdefs t_argdefs_new(t_argdef argdef, t_argdefs argdefs) {
+
+    t_argdefs to_return = (t_argdefs) malloc(sizeof(*t_argdefs));
+
+    to_return->u.argdef = argdef;
+    to_return->u.argdefs = argdefs;
+
+    if(argdefs) {
+        to_return->kind = ARGDEFS_LIST;
+    } else {
+        to_return->kind = ARGDEFS_SINGLE;
+    }
+
+    return to_return;
+}
+
+//t_argdef
+
+t_argdef t_argdef_new(char *id, t_type type) {
+
+    t_argdef to_return = (t_argdef) malloc(sizeof(*t_argdef));
+
+    strcpy(to_return->id,id);
+    to_return->type = type;
+
+    return to_return;
+}
+
+//t_args
+
+t_args t_args_new(t_exp exp, t_args args) {
+
+    t_args to_return = (t_args) malloc(sizeof(*t_args));
+
+    to_return->u.exp = exp;
+    to_return->u.args = args;
+
+    if(args) {
+        to_return->kind = ARGS_LIST;
+
+    }else{
+        to_return->kind = ARGS_SINGLE;
+    }
+
+    return to_return;
+}
+
+//t_ids
+
+t_ids t_ids_new(char *id, t_ids id_list) {
+
+    t_ids to_return = (t_ids) malloc(sizeof(*t_ids));
+
+    strcpy(to_return->u.id, id);
+    to_return->u.id_list;
+
+    if(id_list) {
+
+        to_return->kind = ID_LIST;
+
+    } else {
+
+        to_return->kind = ID_SINGLE;
+    }
+
+    return to_return;
+}
+
 //t_stms
 
 t_stms t_stms_new(t_stm stm, t_stms stms) {
