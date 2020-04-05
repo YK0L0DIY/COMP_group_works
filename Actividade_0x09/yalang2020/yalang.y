@@ -103,13 +103,13 @@ stm:     	    decl
         |       NEXT
                 ;
 
-type:    	    T_INT
-        |	    T_FLOAT
-        |	    T_STRING
-        |	    T_BOOL
-        |	    T_VOID
-        |	    ID
-        |	    type LSBRACE INTLIT RSBRACE
+type:    	    T_INT 			 {$$ = t_type_new_type(0,$1);}
+        |	    T_FLOAT		 	 {$$ = t_type_new_type(1,$1);}
+        |	    T_STRING			 {$$ = t_type_new_type(2,$1);}
+        |	    T_BOOL			 {$$ = t_type_new_type(3,$1);}
+        |	    T_VOID			 {$$ = t_type_new_type(4,$1);}
+        |	    ID				 {$$ = t_type_new_id($1);}
+        |	    type LSBRACE INTLIT RSBRACE  {$$ = t_type_new_arry($1,$3);}
                 ;
 
 lit:     	    INTLIT                       {$$ = t_lit_new_intlit($1);}

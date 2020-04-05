@@ -1,5 +1,6 @@
 #include "ya.h"
 #include <stdlib.h>
+#include <string.h>
 
 //Functions
 t_decls t_decls_new(t_decl decl, t_decls decls) {
@@ -127,6 +128,34 @@ t_lit t_lit_new_boollit(int boollit) {
 
     to_return->kind = LIT_BOOLLIT;
     to_return->u.boollit = boollit;
+
+    return to_return;
+}
+
+t_type t_type_new_type(int kind, char *type) {
+    t_type to_return = (t_type) malloc(sizeof(*t_type));
+
+    to_return->kind = kind;
+    strcpy(to_return->u.type, type);
+
+    return to_return;
+}
+
+t_type t_type_new_id(char *id) {
+    t_type to_return = (t_type) malloc(sizeof(*t_type));
+
+    to_return->kind = TYPE_ID;
+    strcpy(to_return->u.id, id);
+
+    return to_return;
+}
+
+t_type t_type_new_array(t_type type, int intlit) {
+    t_type to_return = (t_type) malloc(sizeof(*t_type));
+
+    to_return->kind = TYPE_ARRAY;
+    to_return->u.array.type = type;
+    to_return->u.array.intlit = intlit;
 
     return to_return;
 }

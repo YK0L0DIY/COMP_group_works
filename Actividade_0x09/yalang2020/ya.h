@@ -279,3 +279,10 @@ t_lit t_lit_new_floatlit(double floatlit);
 t_lit t_lit_new_strlit(char *srtlit);
 
 t_lit t_lit_new_boollit(int boollit);
+
+//t_type
+t_type t_type_new_type(int kind, char *type);
+
+t_type t_type_new_id(char *id);
+
+t_type t_type_new_array(t_type type, int intlit);
