@@ -63,6 +63,7 @@ void yyerror (char const *);
 %nonassoc		LSBRACE RSBRACE
 %nonassoc		LPAR RPAR
 
+%type	<decls>		program
 %type 	<decls>		decls
 %type 	<decl>		decl
 %type	<argdefs>	argdefs
@@ -77,8 +78,8 @@ void yyerror (char const *);
 
 %%
 
-program:  /*    empty */
-        |	    decls
+program:  /*    empty */								{$$ = NULL;}
+        |	    decls								{$$ = $1};
                 ;
 
 decls:   	    decl         							{$$ = t_decls_new($1, NULL);}
