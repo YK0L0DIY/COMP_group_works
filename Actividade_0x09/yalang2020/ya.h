@@ -2,8 +2,9 @@
 typedef t_decls_ *t_decls;
 struct t_decls_ {
 
-    enum {  DECLS_SINGLE,
-            DECLS_LIST
+    enum {
+        DECLS_SINGLE,
+        DECLS_LIST
     } kind;
 
     struct {
@@ -18,19 +19,36 @@ struct t_decl_ {
     enum {
         DECL_INIT,
         DECL_ASSIGN,
-        DECL_FUNC
-    }kind;
+        DECL_FUNC,
+        DECL_DEFINE
+    } kind;
 
     union {
 
-        t_ids id_list;
-        t_type type;
-        t_exp exp;
-        char *id;
-        t_stms stms;
-        t_argdefs argdefs;
+        struct {
+            t_ids id_list;
+            t_type type;
+        } init;
 
-    }u;
+        struct {
+            t_ids id_list;
+            t_type type;
+            t_exp exp;
+        } assign;
+
+        struct {
+            char *id;
+            t_argdefs argdefs;
+            t_type type;
+            t_stms stms;
+        } func;
+
+        struct {
+            char *id;
+            t_type type;
+        } define;
+
+    } u;
 };
 
 typedef t_argdefs_ *t_argdefs;
@@ -45,7 +63,7 @@ struct t_argdefs_ {
 
         t_argdef argdef;
         t_argdefs argdefs;
-    }u;
+    } u;
 };
 
 typedef t_argdef_ *t_argdef;
@@ -67,7 +85,7 @@ struct t_args_ {
 
         t_exp exp;
         t_args args;
-    }u;
+    } u;
 };
 
 typedef t_ids_ *t_ids;
@@ -83,7 +101,7 @@ struct t_ids_ {
         char *id;
         t_ids id_list;
 
-    }u;
+    } u;
 };
 
 typedef t_stms_ *t_stms;
@@ -98,7 +116,7 @@ struct t_stms_ {
 
         t_stm stm;
         t_stms stms;
-    }u;
+    } u;
 };
 
 typedef t_stm_ *t_stm;
@@ -115,14 +133,25 @@ struct t_stm_ {
 
     union {
 
-        t_decl decl;
+        struct {
+            t_decl decl;
+        } stm_decl;
 
-        t_exp exp;
+        struct {
+            t_exp exp;
+        } stm_exp;
 
-        t_stms stms;
-        t_stms else_stms;
+        struct {
+            t_exp exp;
+            t_stms then_stms;
+            t_stms else_stms;
+        } stm_if_else;
 
-    }u;
+        struct {
+            t_exp exp;
+            t_stms while_stms;
+        } stm_while;
+    } u;
 };
 
 typedef t_type_ *t_type;
@@ -142,10 +171,12 @@ struct t_type_ {
 
         char *type;
         char *id;
-        t_type type;
-        int intlit;
+        struct {
+            t_type type;
+            int intlit;
+        } array;
 
-    }u;
+    } u;
 
 };
 
@@ -164,20 +195,21 @@ struct t_lit_ {
         double floalit;
         char *strlit;
         int boollit;
-    }u;
+    } u;
 };
 
 typedef t_exp_ *t_exp;
 struct t_exp_ {
 
-    enum {  EXP_LIT,
-            EXP_ID,
-            EXP_ARRAY,
-            EXP_BINOP,
-            EXP_UNOP,
-            EXP_ASSIGN,
-            EXP_FUNC
-        } kind;
+    enum {
+        EXP_LIT,
+        EXP_ID,
+        EXP_ARRAY,
+        EXP_BINOP,
+        EXP_UNOP,
+        EXP_ASSIGN,
+        EXP_FUNC
+    } kind;
 
     union {
 
@@ -191,7 +223,7 @@ struct t_exp_ {
         struct {
             t_exp exp;
             int intlit;
-        }array;
+        } array;
 
         //EXP_BINOP
         struct {
@@ -208,7 +240,7 @@ struct t_exp_ {
 
         //EXP_ASSIGN
         struct {
-            char *id;
+            t_exp id;
             t_exp value;
         } assign;
 
@@ -216,9 +248,23 @@ struct t_exp_ {
         struct {
             char *id;
             t_args args;
-        }func;
-    }u;
+        } func;
+    } u;
 };
 
 //Functions
 t_decls t_decls_new(t_decl decl, t_decls decls);
+
+t_exp t_exp_new_binop(char op[], t_exp arg1, t_exp arg2);
+
+t_exp t_exp_new_unop(char op[], t_exp arg1);
+
+t_exp t_exp_new_assign(t_exp exp, t_exp value);
+
+t_exp t_exp_new_lit(t_lit lit);
+
+t_exp t_exp_new_id(char *id);
+
+t_exp t_exp_new_array(t_exp exp, int intlit);
+
+t_exp t_exp_new_function(char *id, t_args args);

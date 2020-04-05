@@ -18,6 +18,7 @@ void yyerror (char const *);
     char   *str;
 
     t_decls decls;
+    t_exp exp;
 }
 
 /* Bison declarations.  */
@@ -53,6 +54,7 @@ void yyerror (char const *);
 %nonassoc		LPAR RPAR
 
 %type <decls>   decls
+%type <exp>   exp
 
 %%
 
@@ -114,29 +116,29 @@ lit:     	    INTLIT
         |	    BOOLLIT
                 ;
 
-exp:     	    lit
-        |	    ID
-        |	    exp LSBRACE INTLIT RSBRACE
-        |	    exp ADD exp
-        |	    exp SUB exp
-        |	    exp MUL exp
-        |	    exp DIV exp
-        |	    exp POW exp
-        |	    exp MOD exp
-        |	    exp GT exp
-        |	    exp LT exp
-        |	    exp GEQ exp
-        |	    exp LEQ exp
-        |	    exp EQ exp
-        |	    exp NEQ exp
-        |	    exp AND exp
-        |	    exp OR exp
-        |	    NOT exp
-        |	    SUB exp  %prec NEG
-        |	    LPAR exp RPAR
-        |	    ID LPAR RPAR
-        |	    ID LPAR args RPAR
-        |	    exp ASSIGN exp
+exp:     	    lit                          {$$ = t_exp_new_lit($1);}
+        |	    ID                           {$$ = t_exp_new_id($1);}
+        |	    exp LSBRACE INTLIT RSBRACE   {$$ = t_exp_new_array($1,$3);}
+        |	    exp ADD exp                  {$$ = t_exp_new_binop($1, $3);}
+        |	    exp SUB exp                  {$$ = t_exp_new_binop($1, $3);}
+        |	    exp MUL exp                  {$$ = t_exp_new_binop($1, $3);}
+        |	    exp DIV exp                  {$$ = t_exp_new_binop($1, $3);}
+        |	    exp POW exp                  {$$ = t_exp_new_binop($1, $3);}
+        |	    exp MOD exp                  {$$ = t_exp_new_binop($1, $3);}
+        |	    exp GT exp                   {$$ = t_exp_new_binop($1, $3);}
+        |	    exp LT exp                   {$$ = t_exp_new_binop($1, $3);}
+        |	    exp GEQ exp                  {$$ = t_exp_new_binop($1, $3);}
+        |	    exp LEQ exp                  {$$ = t_exp_new_binop($1, $3);}
+        |	    exp EQ exp                   {$$ = t_exp_new_binop($1, $3);}
+        |	    exp NEQ exp                  {$$ = t_exp_new_binop($1, $3);}
+        |	    exp AND exp                  {$$ = t_exp_new_binop($1, $3);}
+        |	    exp OR exp                   {$$ = t_exp_new_binop($1, $3);}
+        |	    NOT exp                      {$$ = t_exp_new_unop($2);}
+        |	    SUB exp  %prec NEG           {$$ = t_exp_new_unop($2);}
+        |	    LPAR exp RPAR                {$$ = $2;}
+        |	    ID LPAR RPAR                 {$$ = t_exp_new_function($1,NULL);}
+        |	    ID LPAR args RPAR            {$$ = t_exp_new_function($1,$3);}
+        |	    exp ASSIGN exp               {$$ = t_exp_new_assign($1, $3);}
                 ;
 %%
 
