@@ -79,7 +79,7 @@ void yyerror (char const *);
 %%
 
 program:  /*    empty */								{$$ = NULL;}
-        |	    decls								{$$ = $1};
+        |	    decls								{$$ = $1;}
                 ;
 
 decls:   	    decl         							{$$ = t_decls_new($1, NULL);}
@@ -139,22 +139,22 @@ lit:     	    INTLIT                       					{$$ = t_lit_new_intlit($1);}
 exp:     	    lit                          					{$$ = t_exp_new_lit($1);}
         |	    ID                          					{$$ = t_exp_new_id($1);}
         |	    exp LSBRACE INTLIT RSBRACE   					{$$ = t_exp_new_array($1,$3);}
-        |	    exp ADD exp                  					{$$ = t_exp_new_binop($1, $3);}
-        |	    exp SUB exp                  					{$$ = t_exp_new_binop($1, $3);}
-        |	    exp MUL exp                  					{$$ = t_exp_new_binop($1, $3);}
-        |	    exp DIV exp                  					{$$ = t_exp_new_binop($1, $3);}
-        |	    exp POW exp                  					{$$ = t_exp_new_binop($1, $3);}
-        |	    exp MOD exp                  					{$$ = t_exp_new_binop($1, $3);}
-        |	    exp GT exp                   					{$$ = t_exp_new_binop($1, $3);}
-        |	    exp LT exp                   					{$$ = t_exp_new_binop($1, $3);}
-        |	    exp GEQ exp                  					{$$ = t_exp_new_binop($1, $3);}
-        |	    exp LEQ exp                 					{$$ = t_exp_new_binop($1, $3);}
-        |	    exp EQ exp                  					{$$ = t_exp_new_binop($1, $3);}
-        |	    exp NEQ exp                  					{$$ = t_exp_new_binop($1, $3);}
-        |	    exp AND exp                 					{$$ = t_exp_new_binop($1, $3);}
-        |	    exp OR exp                  					{$$ = t_exp_new_binop($1, $3);}
-        |	    NOT exp                     					{$$ = t_exp_new_unop($2);}
-        |	    SUB exp  %prec NEG           					{$$ = t_exp_new_unop($2);}
+        |	    exp ADD exp                  					{$$ = t_exp_new_binop("+",$1, $3);}
+        |	    exp SUB exp                  					{$$ = t_exp_new_binop("-",$1, $3);}
+        |	    exp MUL exp                  					{$$ = t_exp_new_binop("*",$1, $3);}
+        |	    exp DIV exp                  					{$$ = t_exp_new_binop("/",$1, $3);}
+        |	    exp POW exp                  					{$$ = t_exp_new_binop("^",$1, $3);}
+        |	    exp MOD exp                  					{$$ = t_exp_new_binop("mod",$1, $3);}
+        |	    exp GT exp                   					{$$ = t_exp_new_binop(">",$1, $3);}
+        |	    exp LT exp                   					{$$ = t_exp_new_binop("<",$1, $3);}
+        |	    exp GEQ exp                  					{$$ = t_exp_new_binop(">=",$1, $3);}
+        |	    exp LEQ exp                 					{$$ = t_exp_new_binop("<=",$1, $3);}
+        |	    exp EQ exp                  					{$$ = t_exp_new_binop("==",$1, $3);}
+        |	    exp NEQ exp                  					{$$ = t_exp_new_binop("!=",$1, $3);}
+        |	    exp AND exp                 					{$$ = t_exp_new_binop("and",$1, $3);}
+        |	    exp OR exp                  					{$$ = t_exp_new_binop("or",$1, $3);}
+        |	    NOT exp                     					{$$ = t_exp_new_unop("not",$2);}
+        |	    SUB exp  %prec NEG           					{$$ = t_exp_new_unop("-",$2);}
         |	    LPAR exp RPAR                					{$$ = $2;}
         |	    ID LPAR RPAR                 					{$$ = t_exp_new_function($1,NULL);}
         |	    ID LPAR args RPAR            					{$$ = t_exp_new_function($1,$3);}
