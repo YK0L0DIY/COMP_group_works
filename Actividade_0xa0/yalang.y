@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include "ya.h"
+#include "semantic_analyser.h"
 
 extern int yylineno;
 extern FILE *yyin;
@@ -79,7 +80,7 @@ void yyerror (char const *);
 %%
 
 program:  /*    empty */								{$$ = NULL;}
-        |	    decls								{$$ = $1;}
+        |	    decls								{$$ = $1; t_decls_ant($$);}
                 ;
 
 decls:   	    decl         							{$$ = t_decls_new($1, NULL);}

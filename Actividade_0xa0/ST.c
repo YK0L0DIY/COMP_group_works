@@ -12,7 +12,7 @@ struct st_data_ {
     } var;
     struct {
         t_type yatype; /* tipo de retorno */
-        t_args arg; /* "lista" de tipos dos argumentos, por ordem */
+        t_argdefs arg; /* "lista" de tipos dos argumentos, por ordem */
         /* . . . mais tarde, precisaremos de mais info */
     } func;
 
