@@ -1,7 +1,26 @@
-
 #include "list.h"
+#include "ya.h"
 
-list *scope_list = NULL;
+struct st_data_ {
+    enum {ST_VAR, ST_FUNC, ST_TYPE} kind;
+
+    union {
+    struct {
+        t_type yatype; /* _Type pode ser o tipo definido na análise sintáctica */
+        enum {VARloc, VARarg} kind;
+        /* . . . mais tarde, precisaremos de mais info */
+    } var;
+    struct {
+        t_type yatype; /* tipo de retorno */
+        t_args arg; /* "lista" de tipos dos argumentos, por ordem */
+        /* . . . mais tarde, precisaremos de mais info */
+    } func;
+
+    t_type type; /* para este caso só precisamos do tipo destino */
+ } u;
+};
+
+list *scope_list = 0;
 
 /* Insere um novo nome (ID) na ST */
 int ST_insert(char *id, ST_Data data) {
@@ -29,7 +48,7 @@ ST_Data ST_lookup_local(char *id) {
 na função */
 int ST_new_scope() {
 
-    if(scope_list == NULL) {
+    if(scope_list == 0) {
         scope_list = list_new();
     }
 

@@ -12,7 +12,6 @@ typedef struct node {
 	struct node *next;
 } node;
 
-
 /*
     list:
         the list is represented by the head node, only has the pointer to the head node.

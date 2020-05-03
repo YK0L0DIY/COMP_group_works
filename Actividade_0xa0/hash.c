@@ -8,6 +8,13 @@
 #include <string.h>
 #include "hash.h"
 
+typedef struct hash_element {
+
+    char *id;
+    ST_Data data;
+
+}hash_element;
+
 /*
     hashCode:
     Hash function DJB2 adapted to ints.

@@ -1,21 +1,5 @@
-struct st_data_ {
-    enum {ST_VAR, ST_FUNC, ST_TYPE} kind;
-
-    union {
-    struct {
-        _Type yatype; /* _Type pode ser o tipo definido na análise sintáctica */
-        enum {VARloc, VARarg} kind;
-        /* . . . mais tarde, precisaremos de mais info */
-    } var;
-    struct {
-        _Type yatype; /* tipo de retorno */
-        _ArgTypes arg; /* "lista" de tipos dos argumentos, por ordem */
-        /* . . . mais tarde, precisaremos de mais info */
-    } func;
-
-    _Type type; /* para este caso só precisamos do tipo destino */
- } u;
-};
+#ifndef ST_H_
+#define ST_H_
 
 typedef struct st_data_ *ST_Data;
 
@@ -36,3 +20,5 @@ int ST_new_scope();
 
 /* Descarta o último scope - à saída da função */
 int ST_discard();
+
+#endif
