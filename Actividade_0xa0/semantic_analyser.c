@@ -8,19 +8,19 @@ t_type check_types(int op, t_type type1, t_type type2) {
 
         case EXP_BINOP:
 
-            if(type1->kind == T_INT && type2->kind == T_INT) {
+            if(type1->kind == TYPE_T_INT && type2->kind == TYPE_T_INT) {
 
                 return type1;
 
-            } else if(type1->kind == T_FLOAT && type2->kind == T_INT) {
+            } else if(type1->kind == TYPE_T_FLOAT && type2->kind == TYPE_T_INT) {
 
                 return type1;
 
-            } else if(type1->kind == T_INT && type2->kind == T_FLOAT) {
+            } else if(type1->kind == TYPE_T_INT && type2->kind == TYPE_T_FLOAT) {
 
                 return type2;
 
-            } else if(type1->kind == T_BOOL && type2->kind == T_BOOL) {
+            } else if(type1->kind == TYPE_T_BOOL && type2->kind == TYPE_T_BOOL) {
 
                 return type1;
 
@@ -33,17 +33,34 @@ t_type check_types(int op, t_type type1, t_type type2) {
         case EXP_UNOP:
 
             //if true op was "not"
-            if(type1 != NULL && type1->kind == T_BOOL) {
+            if(type1 != NULL && type1->kind == TYPE_T_BOOL) {
 
                 return type1;
 
-            } else if(type2 != NULL && (type1->kind == T_INT || type1->kind == T_FLOAT)) {
+            } else if(type2 != NULL && (type1->kind == TYPE_T_INT || type1->kind == TYPE_T_FLOAT)) {
 
                 return type2;
 
             } else {
                 //TODO ERRO
             }
+            break;
+
+        case EXP_ASSIGN:
+
+            if(type1->kind == TYPE_T_ID) {
+
+                if(type2->kind != TYPE_T_VOID &&
+                    type2->kind != TYPE_T_ID &&
+                    type2->kind != TYPE_T_ARRAY) {
+
+                    return type2;
+                }
+
+            } else if (type1->kind == TYPE_ARRAY) {
+
+            }
+
             break;
 
     }
@@ -122,6 +139,11 @@ t_type t_exp_ant(t_exp exp) {
             break;
 
         case EXP_ASSIGN:
+
+            type1 = t_exp_ant(exp->u.assign.id);
+            type2 = t_exp_ant(exp->u.assign.value);
+
+            return check_types(EXP_ASSIGN, type1, type2);
             break;
 
         case EXP_FUNC:
