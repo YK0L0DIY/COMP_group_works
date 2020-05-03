@@ -3,7 +3,7 @@
 
 #include "ya.h"
 
-void check_types();
+void check_types(int op, t_type type1, t_type type2);
 
 void t_decls_ant(t_decls decls);
 void t_decl_ant(t_decl decl);
@@ -20,6 +20,8 @@ void t_stm_ant(t_stm stm);
 
 void t_type_ant(t_type type);
 
-void t_exp_ant(t_exp exp);
+t_type t_lit_ant(t_lit lit);
+
+t_type t_exp_ant(t_exp exp);
 
 #endif
