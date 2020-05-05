@@ -24,13 +24,15 @@ struct list {
 	node_new:
 		Allocates space for a new node and returns the address of the allocated space.
 */
-static node *node_new(hash_table hash_table, node *next) {
+static node *node_new(node *next) {
 
 	node *node = malloc(sizeof(struct node));
 
+	hash_table new_hash = hash_new();
+
 	if (node != NULL) {
 
-		node -> element = hash_table;
+		node -> element = new_hash;
 		node -> next = next;
 	}
 
@@ -64,9 +66,9 @@ bool list_empty(struct list *list) {
 	list_insert:
 		Creates a new node with the value given and inserts it into the list.
 */
-bool list_insert(struct list *list, hash_table hash_table) {
+bool list_insert(struct list *list) {
 
-	node *node = node_new(hash_table, list->head);
+	node *node = node_new(list->head);
 
 	if (node == NULL) {
 		free(node);

@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "list.h"
 #include "ya.h"
 
@@ -20,7 +21,17 @@ struct st_data_ {
  } u;
 };
 
-list *scope_list = 0;
+list *scope_list = NULL;
+
+/*
+ * Creates the list if is not initialized
+ */
+void init_list() {
+
+    if(scope_list == NULL) {
+        scope_list = list_new();
+    }
+}
 
 /* Insere um novo nome (ID) na ST */
 int ST_insert(char *id, ST_Data data) {

@@ -3,6 +3,8 @@
 
 typedef struct st_data_ *ST_Data;
 
+void init_list();
+
 /*############## ST_Data interface ##############*/
 
 /* Insere um novo nome (ID) na ST */

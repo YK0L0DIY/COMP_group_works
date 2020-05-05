@@ -12,7 +12,7 @@
 typedef struct list list;
 struct list *list_new();
 bool list_empty(struct list *list);
-bool list_insert(struct list *list, hash_table hash_table);
+bool list_insert(struct list *list);
 void list_remove(struct list *list, hash_table hash_table);
 int list_find(struct list *list, hash_table hash_table);
 ST_Data list_find_id(struct list *list, char *id);

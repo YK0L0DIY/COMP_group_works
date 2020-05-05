@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include "ya.h"
+#include "ST.h"
 #include "semantic_analyser.h"
 
 extern int yylineno;
@@ -80,7 +81,7 @@ void yyerror (char const *);
 %%
 
 program:  /*    empty */								{$$ = NULL;}
-        |	    decls								{$$ = $1; t_decls_ant($$);}
+        |	    decls								{$$ = $1; init_list(); t_decls_ant($$);}
                 ;
 
 decls:   	    decl         							{$$ = t_decls_new($1, NULL);}
@@ -139,7 +140,7 @@ lit:     	    INTLIT                       					{$$ = t_lit_new_intlit($1);}
 
 exp:     	    lit                          					{$$ = t_exp_new_lit($1);}
         |	    ID                          					{$$ = t_exp_new_id($1);}
-        |	    exp LSBRACE INTLIT RSBRACE   					{$$ = t_exp_new_array($1,$3);}
+        |	    exp LSBRACE exp RSBRACE   						{$$ = t_exp_new_array($1,$3);} //TODO MUDAR FUNC
         |	    exp ADD exp                  					{$$ = t_exp_new_binop("+",$1, $3);}
         |	    exp SUB exp                  					{$$ = t_exp_new_binop("-",$1, $3);}
         |	    exp MUL exp                  					{$$ = t_exp_new_binop("*",$1, $3);}

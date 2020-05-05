@@ -1,3 +1,4 @@
+#include "ST.h"
 #include "semantic_analyser.h"
 
 #define NOT "not"
@@ -66,6 +67,25 @@ t_type check_types(int op, t_type type1, t_type type2) {
     }
 }
 
+void check_args_type(t_args args, t_argdefs argdefs) {
+
+    t_type type1 = t_exp_ant(args->u.exp);
+    t_type type2 = argdefs->u.argdef.type;
+
+    if(type1->kind != type2->kind) {
+
+        //TODO ERROR ON TYPES;
+
+    }
+
+    if(args->kind == ARGS_SINGLE && argdefs->kind == ARGDEFS_LIST) {
+        //TODO ERRO  NOT ENOUGH ARGS
+    } else if(args->kind == ARGS_LIST && argdefs->kind == ARGDEFS_SINGLE) {
+        //TODO ERRO  TOO MUCH ARGS
+    } else {
+        check_args_type(args->u.args, argdefs->u.argdefs);
+    }
+}
 
 t_type t_lit_ant(t_lit lit) {
 
@@ -147,6 +167,21 @@ t_type t_exp_ant(t_exp exp) {
             break;
 
         case EXP_FUNC:
+
+            ST_Data temp_ST = ST_lookup(exp->u.id);
+
+            if(temp_ST->kind == ST_FUNC) {
+
+                if(exp->u.func.args != NULL) {
+
+                    check_args_type(exp->u.func.args, temp_ST->u.func.args);
+
+                    return temp_ST->u.func.yatype;
+                }
+
+            } else {
+                //TODO ERRO FUNC NOT FOUND
+            }
             break;
 
         default:
