@@ -3,6 +3,8 @@
 
 #define NOT "not"
 
+//TODO void ERROR(); com enum de erros e switch dos mesmos para print
+
 t_type check_types(int op, t_type type1, t_type type2) {
 
     switch (op) {
@@ -60,6 +62,8 @@ t_type check_types(int op, t_type type1, t_type type2) {
 
             } else if (type1->kind == TYPE_ARRAY) {
 
+                //todo perguntar ao carvalho que ele sabe
+
             }
 
             break;
@@ -85,6 +89,67 @@ void check_args_type(t_args args, t_argdefs argdefs) {
     } else {
         check_args_type(args->u.args, argdefs->u.argdefs);
     }
+}
+
+void t_stms_ant(t_smtms stms) {
+
+    switch(stms->kind) {
+
+        case STMS_SINGLE:
+
+            t_stm_ant(stms->u.stm);
+            break;
+
+        case STMS_LIST:
+
+            t_stm_ant(stms->u.stm);
+            t_stms_ant(stms->u.stms);
+            break;
+
+        default:
+            //TODO ERROR();
+            break;
+    }
+}
+
+void t_stms_ant(t_stm stm) {
+
+    switch(stm->kind) {
+
+        case STM_DECL:
+
+            t_decl_ant(stm->u.stm_decl.decl);
+            break;
+
+        case STM_EXP:
+
+            t_exp_ant(stml->u.stm_exp.exp);
+            break;
+
+        case STM_IF_THEN:
+
+            t_exp_ant(stm->u.stm_if_else.exp);
+            t_stms_ant(stm->u.stm_if_else.then_stms);
+            break;
+
+        case STM_IF_THEN_ELSE:
+
+            t_exp_ant(stm->u.stm_if_else.exp);
+            t_stms_ant(stm->u.stm_if_else.then_stms);
+            t_stms_ant(stm->u.stm_if_else.else_stms);
+            break;
+
+        case STM_WHILE:
+
+            t_exp_ant(stm->u.stm_while.exp);
+            t_stms_ant(stm->u.stm_while.while_stms);
+            break;
+
+        default:
+            //TODO ERROR();
+            break;
+    }
+
 }
 
 t_type t_lit_ant(t_lit lit) {
@@ -127,10 +192,21 @@ t_type t_exp_ant(t_exp exp) {
             break;
 
         case EXP_ID:
-            //lookup do id, se n tiver cria?
+
+            ST_Data temp_id = ST_lookup(exp->u-id);
+
+            if(id == NULL) {
+
+                temp_id->type = t_type_new_type(5);
+                ST_insert(exp->u.id, temp_id);
+
+            }
+
+            return temp_id->type;
             break;
 
         case EXP_ARRAY:
+            //TODO i dunno how
             break;
 
         case EXP_BINOP:
