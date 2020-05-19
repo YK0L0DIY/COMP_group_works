@@ -128,12 +128,14 @@ void t_stms_ant(t_stm stm) {
 
         case STM_IF_THEN:
 
+            //TODO VER SE É BOOL
             t_exp_ant(stm->u.stm_if_else.exp);
             t_stms_ant(stm->u.stm_if_else.then_stms);
             break;
 
         case STM_IF_THEN_ELSE:
 
+            //TODO VER SE É BOOL
             t_exp_ant(stm->u.stm_if_else.exp);
             t_stms_ant(stm->u.stm_if_else.then_stms);
             t_stms_ant(stm->u.stm_if_else.else_stms);
@@ -141,6 +143,7 @@ void t_stms_ant(t_stm stm) {
 
         case STM_WHILE:
 
+            //TODO VER SE É BOOL
             t_exp_ant(stm->u.stm_while.exp);
             t_stms_ant(stm->u.stm_while.while_stms);
             break;
@@ -195,6 +198,7 @@ t_type t_exp_ant(t_exp exp) {
 
             ST_Data temp_id = ST_lookup(exp->u-id);
 
+            //TODO SE N EXISTE N HÁ INSERT
             if(id == NULL) {
 
                 temp_id->type = t_type_new_type(5);
