@@ -91,6 +91,61 @@ void check_args_type(t_args args, t_argdefs argdefs) {
     }
 }
 
+void t_decls_ant(t_decls decls) {
+
+    switch(decls->kind) {
+
+        case DECLS_SINGLE:
+
+            t_decl_ant(decls->u.decl);
+            break;
+
+        case DECLS_LIST:
+
+            t_decls_ant(decls->u.decls);
+            break;
+    }
+}
+
+void t_decl_ant(t_decl decl) {
+
+    //TODO ACABAR
+    switch(decl->kind) {
+        case DECL_INIT:
+            break;
+        case DECL_ASSIGN:
+            break;
+        case DECL_FUNC:
+            break;
+        case DECL_DEFINE:
+            break;
+    }
+}
+
+void t_ids_ant(t_ids ids) {
+
+    switch(ids->kind) {
+
+        case ID_SINGLE:
+
+            //TODO ACHO QUE ASSIM N PERMITE REDEFINIR UMA VAR
+            ST_Data temp_id = ST_lookup(ids->u-id);
+
+            if(id == NULL) {
+
+                temp_id->type = t_type_new_type(5);
+                ST_insert(ids->u.id, temp_id);
+
+            }
+            break;
+
+        case ID_LIST:
+
+            t_ids_ant(ids->u.id_list);
+            break;
+    }
+}
+
 void t_stms_ant(t_smtms stms) {
 
     switch(stms->kind) {
