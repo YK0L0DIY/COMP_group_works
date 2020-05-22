@@ -181,6 +181,8 @@ t_type t_lit_ant(t_lit lit) {
             to_return = t_type_new_type(3);
             break;
     }
+
+    return to_return;
 }
 
 t_type t_exp_ant(t_exp exp) {
