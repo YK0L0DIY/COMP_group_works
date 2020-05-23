@@ -111,13 +111,61 @@ void t_decl_ant(t_decl decl) {
 
     //TODO ACABAR
     switch(decl->kind) {
+
         case DECL_INIT:
+
+            t_ids_ant(decl->u.init.id_list);
+            //TYPE?!
+
             break;
+
         case DECL_ASSIGN:
+
+            t_ids_ant(decl->u.assign.id_list);
+
+            if(decl->u.assign.type != t_exp_ant(decl->u.assign.exp)) {
+
+                //TODO ERROR(); DECL_INVALID_ASSIGN
+
+            }
             break;
+
         case DECL_FUNC:
+
+            ST_Data temp_id = ST_lookup(decl->u.func.id);
+
+            if(temp_id == NULL) {
+
+                temp_id->type = decl->u.func.type;
+                ST_insert(decl->u.func.id, temp_id);
+
+            }
+
+            if(decl->u.func.argdefs != NULL) {
+
+                //TODO ?!
+            }
+
+            if(decl->u.func.stms != NULL) {
+
+                t_stms_ant(decl->u.func.stms);
+            }
+
             break;
+
         case DECL_DEFINE:
+
+            ST_Data temp_id = ST_lookup(decl->u.define.id);
+
+            if(temp_id == NULL) {
+
+                temp_id->type = t_type_new_type(5);
+                ST_insert(decl->u.define.id, temp_id);
+
+            } else {
+
+                //TODO ERROR(); DECL_DEFINE_ALREADY_EXISTS
+            }
             break;
     }
 }
@@ -128,14 +176,17 @@ void t_ids_ant(t_ids ids) {
 
         case ID_SINGLE:
 
-            //TODO ACHO QUE ASSIM N PERMITE REDEFINIR UMA VAR
-            ST_Data temp_id = ST_lookup(ids->u-id);
+            //ASSIM N PERMITE REDEFINIR UMA VAR
+            ST_Data temp_id = ST_lookup(ids->u.id);
 
             if(id == NULL) {
 
                 temp_id->type = t_type_new_type(5);
                 ST_insert(ids->u.id, temp_id);
 
+            } else {
+
+                //TODO ERROR(); ID_EXISTS
             }
             break;
 
@@ -167,7 +218,7 @@ void t_stms_ant(t_smtms stms) {
     }
 }
 
-void t_stms_ant(t_stm stm) {
+void t_stm_ant(t_stm stm) {
 
     switch(stm->kind) {
 
@@ -183,24 +234,43 @@ void t_stms_ant(t_stm stm) {
 
         case STM_IF_THEN:
 
-            //TODO VER SE É BOOL
-            t_exp_ant(stm->u.stm_if_else.exp);
-            t_stms_ant(stm->u.stm_if_else.then_stms);
+            if(t_exp_ant(stm->u.stm_if_else.exp)->kind == TYPE_T_BOOL) {
+
+                t_stms_ant(stm->u.stm_if_else.then_stms);
+
+            } else {
+
+                //TODO ERROR(); IF_NOT_BOOL_EXP
+
+            }
+
             break;
 
         case STM_IF_THEN_ELSE:
 
-            //TODO VER SE É BOOL
-            t_exp_ant(stm->u.stm_if_else.exp);
-            t_stms_ant(stm->u.stm_if_else.then_stms);
-            t_stms_ant(stm->u.stm_if_else.else_stms);
+            if(t_exp_ant(stm->u.stm_if_else.exp)->kind == TYPE_T_BOOL) {
+
+                t_stms_ant(stm->u.stm_if_else.then_stms);
+                t_stms_ant(stm->u.stm_if_else.else_stms);
+
+            }else {
+
+                //TODO ERROR(); IF_ELSE_NOT_BOOL_EXP
+
+            }
             break;
 
         case STM_WHILE:
 
-            //TODO VER SE É BOOL
-            t_exp_ant(stm->u.stm_while.exp);
-            t_stms_ant(stm->u.stm_while.while_stms);
+            if(t_exp_ant(stm->u.stm_while.exp)->kind == TYPE_T_BOOL) {
+
+                t_stms_ant(stm->u.stm_while.while_stms);
+
+            } else {
+
+                //TODO ERROR(); WHILE_NOT_BOOL_EXP
+
+            }
             break;
 
         default:
@@ -255,11 +325,9 @@ t_type t_exp_ant(t_exp exp) {
 
             ST_Data temp_id = ST_lookup(exp->u-id);
 
-            //TODO SE N EXISTE N HÁ INSERT
             if(id == NULL) {
 
-                temp_id->type = t_type_new_type(5);
-                ST_insert(exp->u.id, temp_id);
+                //TODO ERROR(); EXP_ID_NOT_FOUND
 
             }
 
