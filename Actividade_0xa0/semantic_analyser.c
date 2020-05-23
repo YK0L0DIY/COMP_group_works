@@ -5,7 +5,7 @@
 
 typedef struct error_ *error;
 
-struct error_{
+struct error_ {
     enum {
         EXP_INCOMPATIBLE_TYPES,
         EXP_ID_NOT_FOUND,
@@ -17,15 +17,67 @@ struct error_{
         ID_EXISTS,
         STMS_NOT_EXISTS,
         IF_NOT_BOOL_EXP,
-        IF_ELSE_NOT_BOOL_EXP
+        IF_ELSE_NOT_BOOL_EXP,
         WHILE_NOT_BOOL_EXP,
         FUNC_NOT_FOUND
-    }kind;
+    } kind;
 };
 
 //TODO void ERROR(); com enum de erros e switch dos mesmos para print
 void ERROR(error err) {
-    
+    switch (err->kind) {
+        case EXP_INCOMPATIBLE_TYPES:
+            pritntf("Expresion with incompatibles types\n");
+            break;
+
+        case EXP_ID_NOT_FOUND:
+            pritntf("Expresion id not found\n");
+            break;
+
+        case EXP_NOT_EXISTS:
+            pritntf("Expresion not exists\n");
+            break;
+
+        case ARGS_NOT_ENOUGH_ARGS:
+            pritntf("Not enough args\n");
+            break;
+
+        case ARGS_TOO_MUCH_ARGS:
+            pritntf("Too much args\n");
+            break;
+
+        case DECL_INVALID_ASSIGN:
+            pritntf("Invalid assignment\n");
+            break;
+
+        case DECL_DEFINE_ALREADY_EXISTS:
+            pritntf("Type already exists\n");
+            break;
+
+        case ID_EXISTS:
+            pritntf("ID already exists\n");
+            break;
+
+        case STMS_NOT_EXISTS:
+            pritntf("Invalid statement type\n");
+            break;
+
+        case IF_NOT_BOOL_EXP:
+            pritntf("Not expresion must be boolean\n");
+            break;
+
+        case IF_ELSE_NOT_BOOL_EXP:
+            pritntf("Not expresion must be boolean\n");
+            break;
+
+        case WHILE_NOT_BOOL_EXP:
+            pritntf("Not expresion must be boolean\n");
+            break;
+
+        case FUNC_NOT_FOUND:
+            pritntf("Function not declared\n");
+            break;
+    }
 }
 
 t_type check_types(int op, t_type type1, t_type type2) {
