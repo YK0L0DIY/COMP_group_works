@@ -3,79 +3,75 @@
 
 #define NOT "not"
 
-typedef struct error_ *error;
-
-struct error_ {
-    enum {
-        EXP_INCOMPATIBLE_TYPES,
-        EXP_ID_NOT_FOUND,
-        EXP_NOT_EXISTS,
-        ARGS_NOT_ENOUGH_ARGS,
-        ARGS_TOO_MUCH_ARGS,
-        DECL_INVALID_ASSIGN,
-        DECL_DEFINE_ALREADY_EXISTS,
-        ID_EXISTS,
-        STMS_NOT_EXISTS,
-        IF_NOT_BOOL_EXP,
-        IF_ELSE_NOT_BOOL_EXP,
-        WHILE_NOT_BOOL_EXP,
-        FUNC_NOT_FOUND
-    } kind;
+enum {
+    EXP_INCOMPATIBLE_TYPES,
+    EXP_ID_NOT_FOUND,
+    EXP_NOT_EXISTS,
+    ARGS_NOT_ENOUGH_ARGS,
+    ARGS_TOO_MUCH_ARGS,
+    DECL_INVALID_ASSIGN,
+    DECL_DEFINE_ALREADY_EXISTS,
+    ID_EXISTS,
+    STMS_NOT_EXISTS,
+    IF_NOT_BOOL_EXP,
+    IF_ELSE_NOT_BOOL_EXP,
+    WHILE_NOT_BOOL_EXP,
+    FUNC_NOT_FOUND
 };
 
 //TODO void ERROR(); com enum de erros e switch dos mesmos para print
-void ERROR(error err) {
-    switch (err->kind) {
+void ERROR(int error) {
+    switch (error) {
         case EXP_INCOMPATIBLE_TYPES:
-            pritntf("Expresion with incompatibles types\n");
+            printf("Expresion with incompatibles types\n");
             break;
 
         case EXP_ID_NOT_FOUND:
-            pritntf("Expresion id not found\n");
+            printf("Expresion id not found\n");
             break;
 
         case EXP_NOT_EXISTS:
-            pritntf("Expresion not exists\n");
+            printf("Expresion not exists\n");
             break;
 
         case ARGS_NOT_ENOUGH_ARGS:
-            pritntf("Not enough args\n");
+            printf("Not enough args\n");
             break;
 
         case ARGS_TOO_MUCH_ARGS:
-            pritntf("Too much args\n");
+            printf("Too much args\n");
             break;
 
         case DECL_INVALID_ASSIGN:
-            pritntf("Invalid assignment\n");
+            printf("Invalid assignment\n");
             break;
 
         case DECL_DEFINE_ALREADY_EXISTS:
-            pritntf("Type already exists\n");
+            printf("Type already exists\n");
             break;
 
         case ID_EXISTS:
-            pritntf("ID already exists\n");
+            printf("ID already exists\n");
             break;
 
         case STMS_NOT_EXISTS:
-            pritntf("Invalid statement type\n");
+            printf("Invalid statement type\n");
             break;
 
         case IF_NOT_BOOL_EXP:
-            pritntf("Not expresion must be boolean\n");
+            printf("Not expresion must be boolean\n");
             break;
 
         case IF_ELSE_NOT_BOOL_EXP:
-            pritntf("Not expresion must be boolean\n");
+            printf("Not expresion must be boolean\n");
             break;
 
         case WHILE_NOT_BOOL_EXP:
-            pritntf("Not expresion must be boolean\n");
+            printf("Not expresion must be boolean\n");
             break;
 
         case FUNC_NOT_FOUND:
-            pritntf("Function not declared\n");
+            printf("Function not declared\n");
             break;
     }
 }
@@ -126,8 +122,13 @@ t_type check_types(int op, t_type type1, t_type type2) {
 
         case EXP_ARRAY:
 
-            if(type2->kind != TYPE_T_INT) {
-                //TODO ERROR(); EXP_ARRAY_INVALID_SIZE
+            if(type1->kind == TYPE_ID || type1->kind == TYPE_ARRAY) {
+
+                if(type2->kind != TYPE_T_INT) {
+                    //TODO ERROR(); EXP_ARRAY_INVALID_SIZE
+                }
+            } else {
+                //TODO ERROR(); EXP_INVALID_ASSIGN
             }
 
             return type1;
@@ -238,6 +239,8 @@ void t_decl_ant(t_decl decl) {
 
             if (temp_id == NULL) {
 
+                temp_id = new_ST_Data();
+
                 temp_id->u.type = t_type_new_type(5);
                 temp_id->kind = ST_TYPE;
                 ST_insert(decl->u.define.id, temp_id);
@@ -261,6 +264,7 @@ void t_decls_ant(t_decls decls) {
 
         case DECLS_LIST:
 
+            t_decl_ant(decls->u.decl);
             t_decls_ant(decls->u.decls);
             break;
     }
@@ -277,6 +281,8 @@ void t_ids_ant(t_ids ids, t_type type) {
 
             if (id == NULL) {
 
+                temp_id = new_ST_Data();
+
                 temp_id->u.var.yatype = type;
                 temp_id->kind = ST_VAR;
                 ST_insert(ids->u.id, temp_id);
@@ -289,11 +295,11 @@ void t_ids_ant(t_ids ids, t_type type) {
 
         case ID_LIST:
 
-            t_ids_ant(ids->u.id_list, type);
-
             ST_Data temp_id = ST_lookup(ids->u.id);
 
             if (id == NULL) {
+
+                temp_id = new_ST_Data();
 
                 temp_id->u.var.yatype = type;
                 temp_id->kind = ST_VAR;
@@ -303,6 +309,8 @@ void t_ids_ant(t_ids ids, t_type type) {
                 ERROR(ID_EXISTS);
                 //TODO ERROR(); ID_EXISTS
             }
+
+            t_ids_ant(ids->u.id_list, type);
 
             break;
     }

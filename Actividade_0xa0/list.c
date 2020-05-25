@@ -45,7 +45,7 @@ static node *node_new(node *next) {
 */
 struct list *list_new(void) {
 
-	list *list = malloc(sizeof(list));
+	struct list *list = malloc(sizeof(list));
 	if (list != NULL){
 		list -> head = NULL;
 	}

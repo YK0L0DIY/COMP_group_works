@@ -9,7 +9,6 @@
 #include "hash.h"
 #include "ST.h"
 
-typedef struct list list;
 struct list *list_new();
 bool list_empty(struct list *list);
 bool list_insert(struct list *list);

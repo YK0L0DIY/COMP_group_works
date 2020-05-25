@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "list.h"
 #include "ya.h"
 
@@ -21,7 +22,7 @@ struct st_data_ {
      } u;
 };
 
-list *scope_list = NULL;
+struct list *scope_list = NULL;
 
 /*
  * Creates the list if is not initialized
@@ -35,7 +36,7 @@ void init_list() {
 
 ST_Data new_ST_Data() {
 
-    ST_Data to_return = (ST_Data) malloc(sizeof(struct st_data_));
+    ST_Data to_return = (ST_Data) malloc(sizeof(*to_return));
 
     return to_return;
 
@@ -71,7 +72,7 @@ int ST_new_scope() {
         scope_list = list_new();
     }
 
-    list_insert(scope_list, hash_new());
+    list_insert(scope_list);
 
 }
 

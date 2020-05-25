@@ -104,7 +104,7 @@ t_exp t_exp_new_lit(t_lit lit);
 
 t_exp t_exp_new_id(char *id);
 
-t_exp t_exp_new_array(t_exp exp, int intlit);
+t_exp t_exp_new_array(t_exp exp, t_exp index);
 
 t_exp t_exp_new_function(char *id, t_args args);
 
