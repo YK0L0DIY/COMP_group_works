@@ -3,25 +3,6 @@
 #include "list.h"
 #include "ya.h"
 
-struct st_data_ {
-    enum {ST_VAR, ST_FUNC, ST_TYPE} kind;
-
-    union {
-        struct {
-            t_type yatype; /* _Type pode ser o tipo definido na análise sintáctica */
-            enum {VARloc, VARarg} kind;
-            /* . . . mais tarde, precisaremos de mais info */
-        } var;
-        struct {
-            t_type yatype; /* tipo de retorno */
-            t_argdefs arg; /* "lista" de tipos dos argumentos, por ordem */
-            /* . . . mais tarde, precisaremos de mais info */
-        } func;
-
-        t_type type; /* para este caso só precisamos do tipo destino */
-     } u;
-};
-
 struct list *scope_list = NULL;
 
 /*
@@ -60,7 +41,7 @@ ST_Data ST_lookup_local(char *id) {
 
     int index = hash(id);
 
-    return scope_list->head->element->data[index];
+    return scope_list->head->element[index]->data;
 
 }
 
@@ -79,6 +60,6 @@ int ST_new_scope() {
 /* Descarta o último scope - à saída da função */
 int ST_discard() {
 
-    list_remove(scope_list, scope_list->head);
+    list_remove(scope_list, scope_list->head->element);
 
 }

@@ -1,24 +1,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
 #include "list.h"
-
-/*
-	node:
-		has the content of the node and the reference for the next node.
-*/
-typedef struct node {
-	hash_table element;
-	struct node *next;
-} node;
-
-/*
-    list:
-        the list is represented by the head node, only has the pointer to the head node.
-*/
-struct list {
-    node *head;
-};
 
 /*
 	node_new:

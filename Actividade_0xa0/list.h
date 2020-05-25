@@ -9,6 +9,25 @@
 #include "hash.h"
 #include "ST.h"
 
+
+
+/*
+	node:
+		has the content of the node and the reference for the next node.
+*/
+typedef struct node {
+    hash_table element;
+    struct node *next;
+} node;
+
+/*
+    list:
+        the list is represented by the head node, only has the pointer to the head node.
+*/
+struct list {
+    node *head;
+};
+
 struct list *list_new();
 bool list_empty(struct list *list);
 bool list_insert(struct list *list);

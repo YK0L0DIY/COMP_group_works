@@ -7,6 +7,13 @@
 #define HASH_SIZE 307
 #include "ST.h"
 
+typedef struct hash_element {
+
+    char *id;
+    ST_Data data;
+
+}hash_element;
+
 typedef struct hash_element **hash_table;
 
 unsigned int hash(char *str);
