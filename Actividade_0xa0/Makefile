@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -g
-OUTFILE = ya!c
+OUTFILE = yac
 LIBS = -lm
 
 OFILES = t_exp.o
@@ -23,6 +23,7 @@ clean:
 	rm -f *~
 	rm -f *.o
 	rm -f *.output
+	rm -f $(OUTFILE)
 
 clean-all clean_all: clean
 	rm -f $(OUTFILE)

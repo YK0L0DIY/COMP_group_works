@@ -1,0 +1,14 @@
+f (n: int) : int {
+  r, i : int = 1;
+  
+  while i <= n do {
+    r = r * i;
+    i = i + 1;
+  };
+  
+  return r;
+};
+
+main () : void {
+  print(f(10));
+};

@@ -1,0 +1,13 @@
+f (n: int) : int {
+  if n < 0 then {
+    print("Negativo");
+  }
+  else {
+    print("Positivo");
+  };
+};
+
+main () : void {
+  f(1);
+  f(-1);
+};
