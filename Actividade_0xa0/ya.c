@@ -216,7 +216,7 @@ struct t_exp_ {
         //EXP_ARRAY
         struct {
             t_exp exp;
-            int intlit;
+            t_exp index;
         } array;
 
         //EXP_BINOP
@@ -599,12 +599,12 @@ t_exp t_exp_new_id(char *id) {
     return to_return;
 }
 
-t_exp t_exp_new_array(t_exp exp, int intlit) {
+t_exp t_exp_new_array(t_exp exp, t_exp index) {
     t_exp to_return = (t_exp) malloc(sizeof(*to_return));
 
     to_return->kind = EXP_ARRAY;
     to_return->u.array.exp = exp;
-    to_return->u.array.intlit = intlit;
+    to_return->u.array.index = index;
 
     return to_return;
 }

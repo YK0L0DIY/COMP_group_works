@@ -140,7 +140,7 @@ lit:     	    INTLIT                       					{$$ = t_lit_new_intlit($1);}
 
 exp:     	    lit                          					{$$ = t_exp_new_lit($1);}
         |	    ID                          					{$$ = t_exp_new_id($1);}
-        |	    exp LSBRACE exp RSBRACE   						{$$ = t_exp_new_array($1,$3);} //TODO MUDAR FUNC
+        |	    exp LSBRACE exp RSBRACE   						{$$ = t_exp_new_array($1,$3);}
         |	    exp ADD exp                  					{$$ = t_exp_new_binop("+",$1, $3);}
         |	    exp SUB exp                  					{$$ = t_exp_new_binop("-",$1, $3);}
         |	    exp MUL exp                  					{$$ = t_exp_new_binop("*",$1, $3);}

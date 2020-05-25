@@ -124,23 +124,13 @@ t_type check_types(int op, t_type type1, t_type type2) {
             }
             break;
 
-        case EXP_ASSIGN:
+        case EXP_ARRAY:
 
-            if (type1->kind == TYPE_T_ID) {
-
-                if (type2->kind != TYPE_T_VOID &&
-                    type2->kind != TYPE_T_ID &&
-                    type2->kind != TYPE_T_ARRAY) {
-
-                    return type2;
-                }
-
-            } else if (type1->kind == TYPE_ARRAY) {
-
-                //todo perguntar ao carvalho que ele sabe
-
+            if(type2->kind != TYPE_T_INT) {
+                //TODO ERROR(); EXP_ARRAY_INVALID_SIZE
             }
 
+            return type1;
             break;
     }
 }
@@ -162,8 +152,101 @@ void check_args_type(t_args args, t_argdefs argdefs) {
     } else if (args->kind == ARGS_LIST && argdefs->kind == ARGDEFS_SINGLE) {
         ERROR(ARGS_TOO_MUCH_ARGS);
         //TODO ERRO  TOO MUCH ARGS
-    } else {
+
+    } else if (args->kind != ARGS_SINGLE && argdefs->kind != ARGDEFS_SINGLE) {
+
         check_args_type(args->u.args, argdefs->u.argdefs);
+
+    }
+}
+
+
+void t_argdef_ant(t_argdef argdef) {
+
+    ST_Data temp_ST = new_ST_Data();
+
+    temp_ST->kind = ST_VAR;
+    temp_ST->u.var.kind = VARarg;
+    temp_ST->u.var.yatype = argdef->type;
+
+    ST_insert(argdef->id, temp_ST);
+}
+
+void t_argdefs_ant(t_argdefs argdefs) {
+
+    switch(argdefs->kind) {
+        case ARGDEFS_SINGLE:
+            t_argdef_ant(argdefs->u.argdef);
+            break;
+        case ARGDEFS_LIST:
+            t_argdef_ant(argdefs->u.argdef);
+            t_argdefs_ant(argdefs->u.argdefs);
+            break;
+    }
+}
+
+void t_decl_ant(t_decl decl) {
+
+    //TODO ACABAR
+    switch (decl->kind) {
+
+        case DECL_INIT:
+
+            t_ids_ant(decl->u.init.id_list, decl->u.init.type);
+
+            break;
+
+        case DECL_ASSIGN:
+
+            t_ids_ant(decl->u.assign.id_list, decl->u.assign.type);
+
+            if (decl->u.assign.type->kind != t_exp_ant(decl->u.assign.exp)->kind) {
+                ERROR(DECL_INVALID_ASSIGN);
+                //TODO ERROR(); DECL_INVALID_ASSIGN
+
+            }
+            break;
+
+        case DECL_FUNC:
+
+            ST_Data temp_id = ST_lookup(decl->u.func.id);
+
+            if (temp_id == NULL) {
+
+                temp_id->u.func.yatype = decl->u.func.type;
+                temp_id->u.func.arg = decl->u.func.argdefs;
+                temp_id->kind = ST_FUNC;
+                ST_insert(decl->u.func.id, temp_id);
+
+                ST_new_scope();
+
+                t_argdefs_ant(decl->u.func.argdefs);
+                t_stm_ant(decl->u.func.stms);
+
+                ST_discard();
+
+            } else {
+
+                //TODO ERROR(); DECL_FUNC_ALREADY_EXISTS
+
+            }
+            break;
+
+        case DECL_DEFINE:
+
+            ST_Data temp_id = ST_lookup(decl->u.define.id);
+
+            if (temp_id == NULL) {
+
+                temp_id->u.type = t_type_new_type(5);
+                temp_id->kind = ST_TYPE;
+                ST_insert(decl->u.define.id, temp_id);
+
+            } else {
+                ERROR(DECL_DEFINE_ALREADY_EXISTS);
+                //TODO ERROR(); DECL_DEFINE_ALREADY_EXISTS
+            }
+            break;
     }
 }
 
@@ -183,70 +266,7 @@ void t_decls_ant(t_decls decls) {
     }
 }
 
-void t_decl_ant(t_decl decl) {
-
-    //TODO ACABAR
-    switch (decl->kind) {
-
-        case DECL_INIT:
-
-            t_ids_ant(decl->u.init.id_list);
-            // TODO TYPE?!
-
-            break;
-
-        case DECL_ASSIGN:
-
-            t_ids_ant(decl->u.assign.id_list);
-
-            if (decl->u.assign.type != t_exp_ant(decl->u.assign.exp)) {
-                ERROR(DECL_INVALID_ASSIGN);
-                //TODO ERROR(); DECL_INVALID_ASSIGN
-
-            }
-            break;
-
-        case DECL_FUNC:
-
-            ST_Data temp_id = ST_lookup(decl->u.func.id);
-
-            if (temp_id == NULL) {
-
-                temp_id->type = decl->u.func.type;
-                ST_insert(decl->u.func.id, temp_id);
-
-            }
-
-            if (decl->u.func.argdefs != NULL) {
-
-                //TODO ?!
-            }
-
-            if (decl->u.func.stms != NULL) {
-
-                t_stms_ant(decl->u.func.stms);
-            }
-
-            break;
-
-        case DECL_DEFINE:
-
-            ST_Data temp_id = ST_lookup(decl->u.define.id);
-
-            if (temp_id == NULL) {
-
-                temp_id->type = t_type_new_type(5);
-                ST_insert(decl->u.define.id, temp_id);
-
-            } else {
-                ERROR(DECL_DEFINE_ALREADY_EXISTS);
-                //TODO ERROR(); DECL_DEFINE_ALREADY_EXISTS
-            }
-            break;
-    }
-}
-
-void t_ids_ant(t_ids ids) {
+void t_ids_ant(t_ids ids, t_type type) {
 
     switch (ids->kind) {
 
@@ -257,7 +277,8 @@ void t_ids_ant(t_ids ids) {
 
             if (id == NULL) {
 
-                temp_id->type = t_type_new_type(5);
+                temp_id->u.var.yatype = type;
+                temp_id->kind = ST_VAR;
                 ST_insert(ids->u.id, temp_id);
 
             } else {
@@ -268,29 +289,21 @@ void t_ids_ant(t_ids ids) {
 
         case ID_LIST:
 
-            t_ids_ant(ids->u.id_list);
-            break;
-    }
-}
+            t_ids_ant(ids->u.id_list, type);
 
-void t_stms_ant(t_smtms stms) {
+            ST_Data temp_id = ST_lookup(ids->u.id);
 
-    switch (stms->kind) {
+            if (id == NULL) {
 
-        case STMS_SINGLE:
+                temp_id->u.var.yatype = type;
+                temp_id->kind = ST_VAR;
+                ST_insert(ids->u.id, temp_id);
 
-            t_stm_ant(stms->u.stm);
-            break;
+            } else {
+                ERROR(ID_EXISTS);
+                //TODO ERROR(); ID_EXISTS
+            }
 
-        case STMS_LIST:
-
-            t_stm_ant(stms->u.stm);
-            t_stms_ant(stms->u.stms);
-            break;
-
-        default:
-            ERROR(STMS_NOT_EXISTS);
-            //TODO ERROR();
             break;
     }
 }
@@ -358,6 +371,28 @@ void t_stm_ant(t_stm stm) {
 
 }
 
+void t_stms_ant(t_smtms stms) {
+
+    switch (stms->kind) {
+
+        case STMS_SINGLE:
+
+            t_stm_ant(stms->u.stm);
+            break;
+
+        case STMS_LIST:
+
+            t_stm_ant(stms->u.stm);
+            t_stms_ant(stms->u.stms);
+            break;
+
+        default:
+            ERROR(STMS_NOT_EXISTS);
+            //TODO ERROR();
+            break;
+    }
+}
+
 t_type t_lit_ant(t_lit lit) {
 
     t_type to_return;
@@ -413,7 +448,11 @@ t_type t_exp_ant(t_exp exp) {
             break;
 
         case EXP_ARRAY:
-            //TODO i dunno how
+
+            type1 = t_exp_ant(exp->u.array.exp);
+            type2 = t_exp_ant(exp->u.array.index);
+
+            return check_types(EXP_ARRAY, type1, type2);
             break;
 
         case EXP_BINOP:
@@ -421,7 +460,7 @@ t_type t_exp_ant(t_exp exp) {
             type1 = t_exp_ant(exp->u.binop.arg1);
             type2 = t_exp_ant(exp->u.binop.arg2);
 
-            return check_types(EXP_BINOP, t1, t2);
+            return check_types(EXP_BINOP, type1, type2);
 
             break;
 
@@ -443,10 +482,53 @@ t_type t_exp_ant(t_exp exp) {
 
         case EXP_ASSIGN:
 
-            type1 = t_exp_ant(exp->u.assign.id);
             type2 = t_exp_ant(exp->u.assign.value);
 
-            return check_types(EXP_ASSIGN, type1, type2);
+            ST_Data temp_ST = ST_lookup(exp->u.assign.id);
+
+            if(temp_ST == NULL) {
+                //TODO ERROR(); EXP_ASSIGN_INVALID_ID
+
+            } else {
+
+                if(temp_ST->kind != ST_VAR) {
+
+                    //TODO ERROR(); EXP_ASSIGN_NOT_A_VAR
+
+                } else {
+
+                    type1 = temp_ST->u.var.yatype;
+
+                    if ((type1->kind == TYPE_ARRAY) && (type2->kind == TYPE_ARRAY)) {
+
+                        if(type1->u.array.type->kind != type2->u.array.type->kind){
+
+                            //TODO ERROR(); EXP_ASSIGN_INCOMPATIBLE_ARRAY_TYPE
+
+                        }
+
+                    }else if(type1->kind == TYPE_ARRAY) {
+
+                        if (type2->kind != type1->u.array.type->kind) {
+
+                            //TODO ERROR(); EXP_ASSIGN_NCOMPATIBLE_TYPE_WITH_ARRAY
+                        }
+                    }else if (type2->kind == TYPE_ARRAY){
+
+                        if(type2->u.array.type->kind != type1->kind){
+
+                            //TODO ERROR(); EXP_ASSIGN_NCOMPATIBLE_TYPE_WITH_ARRAY
+                        }
+
+                    } else if(type1->kind != type2->kind) {
+
+                        //TODO ERROR(); EXP_ASSIGN_INCOMAPTIBLE_TYPES
+
+                    } else
+                }
+            }
+
+            return type1;
             break;
 
         case EXP_FUNC:
@@ -457,7 +539,7 @@ t_type t_exp_ant(t_exp exp) {
 
                 if (exp->u.func.args != NULL) {
 
-                    check_args_type(exp->u.func.args, temp_ST->u.func.args);
+                    check_args_type(exp->u.func.args, temp_ST->u.func.arg);
 
                     return temp_ST->u.func.yatype;
                 }

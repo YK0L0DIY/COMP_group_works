@@ -6,19 +6,19 @@ struct st_data_ {
     enum {ST_VAR, ST_FUNC, ST_TYPE} kind;
 
     union {
-    struct {
-        t_type yatype; /* _Type pode ser o tipo definido na análise sintáctica */
-        enum {VARloc, VARarg} kind;
-        /* . . . mais tarde, precisaremos de mais info */
-    } var;
-    struct {
-        t_type yatype; /* tipo de retorno */
-        t_argdefs arg; /* "lista" de tipos dos argumentos, por ordem */
-        /* . . . mais tarde, precisaremos de mais info */
-    } func;
+        struct {
+            t_type yatype; /* _Type pode ser o tipo definido na análise sintáctica */
+            enum {VARloc, VARarg} kind;
+            /* . . . mais tarde, precisaremos de mais info */
+        } var;
+        struct {
+            t_type yatype; /* tipo de retorno */
+            t_argdefs arg; /* "lista" de tipos dos argumentos, por ordem */
+            /* . . . mais tarde, precisaremos de mais info */
+        } func;
 
-    t_type type; /* para este caso só precisamos do tipo destino */
- } u;
+        t_type type; /* para este caso só precisamos do tipo destino */
+     } u;
 };
 
 list *scope_list = NULL;
@@ -31,6 +31,14 @@ void init_list() {
     if(scope_list == NULL) {
         scope_list = list_new();
     }
+}
+
+ST_Data new_ST_Data() {
+
+    ST_Data to_return = (ST_Data) malloc(sizeof(struct st_data_));
+
+    return to_return;
+
 }
 
 /* Insere um novo nome (ID) na ST */
