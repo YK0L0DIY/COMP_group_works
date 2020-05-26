@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include "list.h"
 #include "ya.h"
@@ -31,15 +32,21 @@ ST_Data ST_lookup_local(char *id) {
 
     int index = hash(id);
 
-    return scope_list->head->element[index]->data;
+    if (scope_list->head != NULL && scope_list->head->element[index] != NULL &&
+        (strcmp(scope_list->head->element[index]->id, id) == 0)) {
 
+        return scope_list->head->element[index]->data;
+
+    } else {
+        return NULL;
+    }
 }
 
 /* Cria um novo âmbito (scope ou environment) local - à entrada
 na função */
 int ST_new_scope() {
 
-    if(scope_list == NULL) {
+    if (scope_list == NULL) {
         scope_list = list_new();
     }
 

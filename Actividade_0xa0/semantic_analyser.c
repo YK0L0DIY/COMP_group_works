@@ -189,15 +189,15 @@ void t_argdefs_ant(t_argdefs argdefs) {
         return;
     }
 
-        switch (argdefs->kind) {
-            case ARGDEFS_SINGLE:
-                t_argdef_ant(argdefs->u.argdef);
-                break;
-            case ARGDEFS_LIST:
-                t_argdef_ant(argdefs->u.argdef);
-                t_argdefs_ant(argdefs->u.argdefs);
-                break;
-        }
+    switch (argdefs->kind) {
+        case ARGDEFS_SINGLE:
+            t_argdef_ant(argdefs->u.argdef);
+            break;
+        case ARGDEFS_LIST:
+            t_argdef_ant(argdefs->u.argdef);
+            t_argdefs_ant(argdefs->u.argdefs);
+            break;
+    }
 }
 
 void t_decl_ant(t_decl decl) {
@@ -297,14 +297,13 @@ void t_ids_ant(t_ids ids, t_type type) {
         case ID_SINGLE:
 
             //ASSIM N PERMITE REDEFINIR UMA VAR
-            temp_id = ST_lookup(ids->u.id);
+            temp_id = ST_lookup_local(ids->u.id);
 
             if (temp_id == NULL) {
 
                 temp_id = new_ST_Data();
 
                 temp_id->u.var.yatype = type;
-                temp_id->u.type = t_type_new_type(5);
                 temp_id->kind = ST_VAR;
                 ST_insert(ids->u.id, temp_id);
 
@@ -475,7 +474,24 @@ t_type t_exp_ant(t_exp exp) {
 
             }
 
-            return temp_id->u.type;
+            switch (temp_id->kind) {
+
+                case ST_VAR:
+
+                    return temp_id->u.var.yatype;
+                    break;
+
+                case ST_FUNC:
+
+                    return temp_id->u.func.yatype;
+                    break;
+
+                case ST_TYPE:
+
+                    return temp_id->u.type;
+                    break;
+
+            }
             break;
 
         case EXP_ARRAY:

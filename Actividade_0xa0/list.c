@@ -130,14 +130,12 @@ ST_Data list_find_id(struct list *list, char *id) {
     node *node = list->head;
     int index = hash(id);
 
-    while (node != NULL && node->element[index] != NULL && (strcmp(node->element[index]->id, id) != 0)) {
+    while (node != NULL) {
 
-        if (node->next != NULL) {
-
-            node = node->next;
-
-        } else {
+        if(node->element[index] != NULL && (strcmp(node->element[index]->id, id) == 0)) {
             break;
+        } else {
+            node = node->next;
         }
     }
 
