@@ -49,7 +49,7 @@ int hash_destroy(hash_table hash_table) {
 
 void hash_insert(char *id, ST_Data data, hash_table hash_table) {
 
-    hash_element *new_element = (hash_element*) malloc(sizeof(hash_element));
+    hash_element *new_element = (hash_element*) malloc(sizeof(*new_element));
 
     new_element->id = strdup(id);
     new_element->data = data;

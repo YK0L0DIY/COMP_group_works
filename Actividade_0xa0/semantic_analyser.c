@@ -506,8 +506,13 @@ t_type t_exp_ant(t_exp exp) {
         case EXP_ASSIGN:
 
             type2 = t_exp_ant(exp->u.assign.value);
+            type1 = t_exp_ant(exp->u.assign.id);
 
-            temp_id = ST_lookup(exp->u.assign.id);
+            if (type1->kind != TYPE_ID) {
+                //#TODO ERROR(); EXP_ASSIGN_INVALID_ID
+            }else {
+                temp_id = ST_lookup((exp->u.assign.id)->u.id);
+            }
 
             if (temp_id == NULL) {
                 //TODO ERROR(); EXP_ASSIGN_INVALID_ID

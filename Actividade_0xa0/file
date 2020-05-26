@@ -1,0 +1,7 @@
+main () : void {
+  a : bool = true;
+
+  if a then {
+    b = "hello, world";
+  };
+};
