@@ -50,6 +50,6 @@ int ST_new_scope() {
 /* Descarta o último scope - à saída da função */
 int ST_discard() {
 
-    list_remove(scope_list, scope_list->head->element);
+    list_remove(scope_list);
 
 }

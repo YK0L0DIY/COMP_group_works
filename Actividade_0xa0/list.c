@@ -10,17 +10,17 @@
 */
 static node *node_new(node *next) {
 
-	node *node = malloc(sizeof(struct node));
+    node *node = malloc(sizeof(struct node));
 
-	hash_table new_hash = hash_new();
+    hash_table new_hash = hash_new();
 
-	if (node != NULL) {
+    if (node != NULL) {
 
-		node -> element = new_hash;
-		node -> next = next;
-	}
+        node->element = new_hash;
+        node->next = next;
+    }
 
-	return node;
+    return node;
 }
 
 /*
@@ -29,12 +29,12 @@ static node *node_new(node *next) {
 */
 struct list *list_new(void) {
 
-	struct list *list = malloc(sizeof(*list));
-	if (list != NULL){
-		list -> head = NULL;
-	}
+    struct list *list = malloc(sizeof(*list));
+    if (list != NULL) {
+        list->head = NULL;
+    }
 
-	return list;
+    return list;
 }
 
 /*
@@ -43,7 +43,7 @@ struct list *list_new(void) {
 */
 bool list_empty(struct list *list) {
 
-	return (list -> head == NULL);
+    return (list->head == NULL);
 }
 
 /*
@@ -52,45 +52,59 @@ bool list_empty(struct list *list) {
 */
 bool list_insert(struct list *list) {
 
-	node *node = node_new(list->head);
+    node *node = node_new(list->head);
 
-	if (node == NULL) {
-		free(node);
-		return false;
-	}
+    if (node == NULL) {
+        free(node);
+        return false;
+    }
 
-	list -> head = node;
+    list->head = node;
 
-	return true;
+    return true;
 }
 
 /*
 	list_remove:
 		Given a certain value, removes it from the list. Connects the previous node to next one so the list doesn't "break".
 */
-void list_remove(struct list *list, hash_table hash_table) {
+void list_remove(struct list *list) {
 
-    struct node *node = list -> head;
-    struct node *prevNode = list -> head;
-    int counter = 0;
+//    struct node *node = list -> head;
+//    struct node *prevNode = list -> head;
+//    int counter = 0;
+//
+//    while (node -> next != NULL && node->element != hash_table) {
+//
+//        node = node -> next;
+//
+//        if(counter > 0)
+//            prevNode = prevNode -> next;
+//        counter++;
+//    }
+//
+//    if(counter == 0) {
+//
+//        list -> head = node -> next;
+//
+//    } else {
+//        prevNode -> next = node -> next;
+//    }
+//    free(node);
 
-    while (node -> next != NULL && node->element != hash_table) {
+    struct node *head = list->head;
+    struct node *temp = NULL;
 
-        node = node -> next;
+    if (head->next != NULL) {
 
-        if(counter > 0)
-            prevNode = prevNode -> next;
-        counter++;
+        temp = head->next;
+
+        free(head->element);
+        free(head);
+
+        list->head = temp;
+
     }
-
-    if(counter == 0) {
-
-        list -> head = node -> next;
-
-    } else {
-        prevNode -> next = node -> next;
-    }
-    free(node);
 }
 
 /*
@@ -99,16 +113,16 @@ void list_remove(struct list *list, hash_table hash_table) {
 */
 int list_find(struct list *list, hash_table hash_table) {
 
-	node *node = list->head;
-	int index = 0;
+    node *node = list->head;
+    int index = 0;
 
-	while(node != NULL && node->element != hash_table) {
+    while (node != NULL && node->element != hash_table) {
 
-		node = node->next;
-		index++;
-	}
+        node = node->next;
+        index++;
+    }
 
-	return (node == NULL ? -1 : index);
+    return (node == NULL ? -1 : index);
 }
 
 ST_Data list_find_id(struct list *list, char *id) {
@@ -116,13 +130,18 @@ ST_Data list_find_id(struct list *list, char *id) {
     node *node = list->head;
     int index = hash(id);
 
-    while(node != NULL && node->next != NULL && node->element[index] != NULL && (strcmp(node->element[index]->id, id) != 0)) {
+    while (node != NULL && node->element[index] != NULL && (strcmp(node->element[index]->id, id) != 0)) {
 
-        node = node->next;
+        if (node->next != NULL) {
 
+            node = node->next;
+
+        } else {
+            break;
+        }
     }
 
-    if(node == NULL || node->element[index] == NULL) {
+    if (node == NULL || node->element[index] == NULL) {
         return NULL;
     } else {
         return node->element[index]->data;
@@ -135,15 +154,15 @@ ST_Data list_find_id(struct list *list, char *id) {
 */
 void list_print(struct list *list) {
 
-	node *node = list -> head;
+    node *node = list->head;
 
-	while (node != NULL) {
+    while (node != NULL) {
 
         for (int i = 0; i < HASH_SIZE; i++) {
             printf("%s ", node->element[i]->id);
         }
-        node = node -> next;
-	}
+        node = node->next;
+    }
 }
 
 /*
@@ -152,13 +171,13 @@ void list_print(struct list *list) {
 */
 void list_destroy(struct list *list) {
 
-	node *node = list->head;
-	struct node *temp;
+    node *node = list->head;
+    struct node *temp;
 
-	while (node != NULL) {
-		temp = node;
-		node = node -> next;
-		free(temp);
-	}
-	free(list);
+    while (node != NULL) {
+        temp = node;
+        node = node->next;
+        free(temp);
+    }
+    free(list);
 }

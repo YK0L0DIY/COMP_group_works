@@ -304,6 +304,7 @@ void t_ids_ant(t_ids ids, t_type type) {
                 temp_id = new_ST_Data();
 
                 temp_id->u.var.yatype = type;
+                temp_id->u.type = t_type_new_type(5);
                 temp_id->kind = ST_VAR;
                 ST_insert(ids->u.id, temp_id);
 
@@ -512,10 +513,10 @@ t_type t_exp_ant(t_exp exp) {
 
         case EXP_ASSIGN:
 
-            type2 = t_exp_ant(exp->u.assign.value);
             type1 = t_exp_ant(exp->u.assign.id);
+            type2 = t_exp_ant(exp->u.assign.value);
 
-            if (type1->kind != EXP_ID) {
+            if (type1->kind != TYPE_ID) {
                 //#TODO ERROR(); EXP_ASSIGN_INVALID_ID
             } else {
                 temp_id = ST_lookup((exp->u.assign.id)->u.id);
