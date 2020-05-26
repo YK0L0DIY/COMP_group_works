@@ -5,16 +5,6 @@
 
 struct list *scope_list = NULL;
 
-/*
- * Creates the list if is not initialized
- */
-void init_list() {
-
-    if(scope_list == NULL) {
-        scope_list = list_new();
-    }
-}
-
 ST_Data new_ST_Data() {
 
     ST_Data to_return = (ST_Data) malloc(sizeof(*to_return));
@@ -49,7 +39,7 @@ ST_Data ST_lookup_local(char *id) {
 na função */
 int ST_new_scope() {
 
-    if(scope_list == 0) {
+    if(scope_list == NULL) {
         scope_list = list_new();
     }
 

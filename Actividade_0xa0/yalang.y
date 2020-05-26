@@ -81,7 +81,7 @@ void yyerror (char const *);
 %%
 
 program:  /*    empty */								{$$ = NULL;}
-        |	    decls								{$$ = $1; init_list(); t_decls_ant($$);}
+        |	    decls								{$$ = $1; ST_new_scope(); t_decls_ant($$);}
                 ;
 
 decls:   	    decl         							{$$ = t_decls_new($1, NULL);}

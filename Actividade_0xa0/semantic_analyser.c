@@ -185,15 +185,19 @@ void t_argdef_ant(t_argdef argdef) {
 
 void t_argdefs_ant(t_argdefs argdefs) {
 
-    switch (argdefs->kind) {
-        case ARGDEFS_SINGLE:
-            t_argdef_ant(argdefs->u.argdef);
-            break;
-        case ARGDEFS_LIST:
-            t_argdef_ant(argdefs->u.argdef);
-            t_argdefs_ant(argdefs->u.argdefs);
-            break;
+    if (argdefs == NULL) {
+        return;
     }
+
+        switch (argdefs->kind) {
+            case ARGDEFS_SINGLE:
+                t_argdef_ant(argdefs->u.argdef);
+                break;
+            case ARGDEFS_LIST:
+                t_argdef_ant(argdefs->u.argdef);
+                t_argdefs_ant(argdefs->u.argdefs);
+                break;
+        }
 }
 
 void t_decl_ant(t_decl decl) {
@@ -225,6 +229,8 @@ void t_decl_ant(t_decl decl) {
             temp_id = ST_lookup(decl->u.func.id);
 
             if (temp_id == NULL) {
+
+                temp_id = new_ST_Data();
 
                 temp_id->u.func.yatype = decl->u.func.type;
                 temp_id->u.func.arg = decl->u.func.argdefs;
@@ -464,6 +470,7 @@ t_type t_exp_ant(t_exp exp) {
             if (temp_id == NULL) {
                 ERROR(EXP_ID_NOT_FOUND);
                 //TODO ERROR(); EXP_ID_NOT_FOUND
+                break;
 
             }
 
@@ -508,9 +515,9 @@ t_type t_exp_ant(t_exp exp) {
             type2 = t_exp_ant(exp->u.assign.value);
             type1 = t_exp_ant(exp->u.assign.id);
 
-            if (type1->kind != TYPE_ID) {
+            if (type1->kind != EXP_ID) {
                 //#TODO ERROR(); EXP_ASSIGN_INVALID_ID
-            }else {
+            } else {
                 temp_id = ST_lookup((exp->u.assign.id)->u.id);
             }
 
@@ -563,6 +570,10 @@ t_type t_exp_ant(t_exp exp) {
 
             temp_id = ST_lookup(exp->u.id);
 
+            if (temp_id == NULL) {
+                break;
+            }
+
             if (temp_id->kind == ST_FUNC) {
 
                 if (exp->u.func.args != NULL) {
@@ -582,7 +593,6 @@ t_type t_exp_ant(t_exp exp) {
             ERROR(EXP_NOT_EXISTS);
             // TODO ERROR
             break;
-
     }
-
+    return NULL;
 }

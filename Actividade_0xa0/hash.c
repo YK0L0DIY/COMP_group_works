@@ -20,7 +20,7 @@ unsigned int hash(char *str) {
     while ((c = *str++))
         hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
 
-    return hash;
+    return hash % HASH_SIZE;
 }
 
 hash_table hash_new() {

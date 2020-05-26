@@ -29,7 +29,7 @@ static node *node_new(node *next) {
 */
 struct list *list_new(void) {
 
-	struct list *list = malloc(sizeof(list));
+	struct list *list = malloc(sizeof(*list));
 	if (list != NULL){
 		list -> head = NULL;
 	}
@@ -88,7 +88,6 @@ void list_remove(struct list *list, hash_table hash_table) {
         list -> head = node -> next;
 
     } else {
-
         prevNode -> next = node -> next;
     }
     free(node);
@@ -117,13 +116,17 @@ ST_Data list_find_id(struct list *list, char *id) {
     node *node = list->head;
     int index = hash(id);
 
-    while(node != NULL && (strcmp(node->element[index]->id, id) != 0)) {
+    while(node != NULL && node->next != NULL && node->element[index] != NULL && (strcmp(node->element[index]->id, id) != 0)) {
 
         node = node->next;
 
     }
 
-    return node->element[index]->data;
+    if(node == NULL || node->element[index] == NULL) {
+        return NULL;
+    } else {
+        return node->element[index]->data;
+    }
 }
 
 /*

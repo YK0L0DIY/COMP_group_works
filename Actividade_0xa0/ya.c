@@ -148,7 +148,7 @@ t_stms t_stms_new(t_stm stm, t_stms stms) {
     to_return->u.stm = stm;
     to_return->u.stms = stms;
 
-    if (stms) {
+    if (stms == NULL) {
 
         to_return->kind = STMS_SINGLE;
 
