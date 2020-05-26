@@ -51,7 +51,7 @@ t_decl t_decl_new_func(char *id, t_argdefs argdefs, t_type type, t_stms stms) {
     t_decl to_return = (t_decl) malloc(sizeof(*to_return));
 
     to_return->kind = DECL_FUNC;
-    strcpy(to_return->u.func.id, id);
+    to_return->u.func.id = strdup(id);
     to_return->u.func.type = type;
     to_return->u.func.argdefs = argdefs;
     to_return->u.func.stms = stms;
@@ -63,7 +63,7 @@ t_decl t_decl_new_define(char *id, t_type type) {
     t_decl to_return = (t_decl) malloc(sizeof(*to_return));
 
     to_return->kind = DECL_DEFINE;
-    strcpy(to_return->u.define.id, id);
+    to_return->u.define.id = strdup(id);
     to_return->u.define.type = type;
 
     return to_return;
@@ -93,7 +93,7 @@ t_argdef t_argdef_new(char *id, t_type type) {
 
     t_argdef to_return = (t_argdef) malloc(sizeof(*to_return));
 
-    strcpy(to_return->id, id);
+    to_return->id = (id);
     to_return->type = type;
 
     return to_return;
@@ -124,7 +124,7 @@ t_ids t_ids_new(char *id, t_ids id_list) {
 
     t_ids to_return = (t_ids) malloc(sizeof(*to_return));
 
-    strcpy(to_return->u.id, id);
+    to_return->u.id = strdup(id);
     to_return->u.id_list = id_list;
 
     if (id_list) {
@@ -247,7 +247,7 @@ t_type t_type_new_id(char *id) {
     t_type to_return = (t_type) malloc(sizeof(*to_return));
 
     to_return->kind = TYPE_ID;
-    strcpy(to_return->u.id, id);
+    to_return->u.id = (id);
 
     return to_return;
 }
@@ -286,7 +286,7 @@ t_lit t_lit_new_strlit(char *strlit) {
     t_lit to_return = (t_lit) malloc(sizeof(*to_return));
 
     to_return->kind = LIT_STRLIT;
-    strcpy(to_return->u.strlit, strlit);
+    to_return->u.strlit = (strlit);
 
     return to_return;
 }
@@ -307,7 +307,7 @@ t_exp t_exp_new_binop(char op[], t_exp arg1, t_exp arg2) {
     t_exp to_return = (t_exp) malloc(sizeof(*to_return));
 
     to_return->kind = EXP_BINOP;
-    strcpy(to_return->u.binop.op, op);
+    to_return->u.binop.op = strdup(op);
     to_return->u.binop.arg1 = arg1;
     to_return->u.binop.arg2 = arg2;
 
@@ -319,7 +319,7 @@ t_exp t_exp_new_unop(char op[], t_exp arg1) {
     t_exp to_return = (t_exp) malloc(sizeof(*to_return));
 
     to_return->kind = EXP_UNOP;
-    strcpy(to_return->u.unop.op, op);
+    to_return->u.unop.op = strdup(op);
     to_return->u.unop.arg = arg1;
 
     return to_return;
@@ -350,7 +350,7 @@ t_exp t_exp_new_id(char *id) {
     t_exp to_return = (t_exp) malloc(sizeof(*to_return));
 
     to_return->kind = EXP_ID;
-    strcpy(to_return->u.id, id);
+    to_return->u.id = strdup(id);
 
     return to_return;
 }
@@ -370,7 +370,7 @@ t_exp t_exp_new_function(char *id, t_args args) {
 
     to_return->kind = EXP_FUNC;
     to_return->u.func.args = args;
-    strcpy(to_return->u.func.id, id);
+    to_return->u.func.id = strdup(id);
 
     return to_return;
 }

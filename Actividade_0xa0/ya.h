@@ -243,14 +243,14 @@ struct t_exp_ {
 
         //EXP_BINOP
         struct {
-            char op[3];
+            char *op;
             t_exp arg1;
             t_exp arg2;
         } binop;
 
         //EXP_UNOP
         struct {
-            char op[3];
+            char *op;
             t_exp arg;
         } unop;
 
