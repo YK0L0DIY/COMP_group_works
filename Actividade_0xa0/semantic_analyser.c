@@ -550,7 +550,7 @@ t_type t_exp_ant(t_exp exp) {
             type1 = t_exp_ant(exp->u.assign.id);
             type2 = t_exp_ant(exp->u.assign.value);
 
-            if (type1->kind != TYPE_ID) {
+            if (type1->kind == TYPE_ID || type1->kind == TYPE_T_VOID) {
                 ERROR(EXP_ASSIGN_INVALID_ID);
             } else {
                 temp_id = ST_lookup((exp->u.assign.id)->u.id);
@@ -585,7 +585,7 @@ t_type t_exp_ant(t_exp exp) {
 
                         if (type2->u.array.type->kind != type1->kind) {
 
-                            ERROR(EXP_ASSIGN_INCOMPATIBLE_TYPE_WITH_ARRAY)
+                            ERROR(EXP_ASSIGN_INCOMPATIBLE_TYPE_WITH_ARRAY);
                         }
 
                     } else if (type1->kind != type2->kind) {
