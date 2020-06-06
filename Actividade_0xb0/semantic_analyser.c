@@ -35,6 +35,13 @@ enum {
 
 };
 
+int number_of_args = 0,
+    number_of_vars = 0,
+    on_func = 0;
+
+int offset_args = 0,
+    offset_vars = 0;
+
 void ERROR(int error) {
     switch (error) {
         case EXP_INCOMPATIBLE_TYPES:
@@ -207,6 +214,9 @@ void check_args_type(t_args args, t_argdefs argdefs) {
 
 void t_argdef_ant(t_argdef argdef) {
 
+    number_of_args++;
+    offset_args++;
+
     ST_Data temp_id = new_ST_Data();
 
     temp_id->kind = ST_VAR;
@@ -261,6 +271,8 @@ void t_decl_ant(t_decl decl) {
 
             if (temp_id == NULL) {
 
+                on_func = 1;
+
                 temp_id = new_ST_Data();
 
                 temp_id->u.func.yatype = decl->u.func.type;
@@ -274,6 +286,14 @@ void t_decl_ant(t_decl decl) {
                 t_stms_ant(decl->u.func.stms);
 
                 ST_discard();
+
+                decl->u.func.size = number_of_args + number_of_vars;
+
+                on_func = 0;
+                number_of_vars = 0;
+                number_of_args = 0;
+                offset_args = 0;
+                offset_vars = 0;
 
             } else {
                 ERROR(DECL_FUNC_ALREADY_EXISTS);
@@ -328,6 +348,13 @@ void t_ids_ant(t_ids ids, t_type type) {
             temp_id = ST_lookup_local(ids->u.id);
 
             if (temp_id == NULL) {
+
+                if(on_func) {
+                    number_of_vars++;
+                    offset_vars--;
+
+                    ids->u.offset_var = offset_vars;
+                }
 
                 temp_id = new_ST_Data();
 

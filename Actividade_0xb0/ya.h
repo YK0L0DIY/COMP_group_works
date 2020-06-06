@@ -65,6 +65,7 @@ struct t_decl_ {
             t_argdefs argdefs;
             t_type type;
             t_stms stms;
+            int size;
         } func;
 
         struct {
@@ -120,6 +121,7 @@ struct t_ids_ {
 
         char *id;
         t_ids id_list;
+        int offset_var;
 
     } u;
 };

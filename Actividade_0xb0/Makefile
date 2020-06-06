@@ -6,8 +6,8 @@ LIBS = -lm
 OFILES = t_exp.o
 
 
-all: parser.o lexer.o ya.o ST.o hash.o list.o semantic_analyser.o
-	$(CC) $(CFLAGS) parser.o lexer.o ya.o ST.o hash.o list.o semantic_analyser.o -o $(OUTFILE) $(LIBS)
+all: parser.o lexer.o ya.o ST.o hash.o list.o semantic_analyser.o code_generator.o
+	$(CC) $(CFLAGS) parser.o lexer.o ya.o ST.o hash.o list.o semantic_analyser.o code_generator.o -o $(OUTFILE) $(LIBS)
 
 parser.c: yalang.y
 	bison -y -d $< -o $@ -r all

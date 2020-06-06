@@ -2,6 +2,11 @@
 #include "code_generator.h"
 #include "ya.h"
 
+void save_on_stack(char *reg) {
+    printf("sw %s, 0($sp)\n", reg);
+    printf("addiu $sp, $sp, -4\n");
+}
+
 //DECLS
 void codegen_decls(t_decls decls){
 
@@ -22,20 +27,72 @@ void codegen_decls(t_decls decls){
 }
 
 //DECLS AND SUB-GENERATORS
-void codegen_decl_init(){
-    
-}
-void codegen_decl_assign(){
-    
-}
-void codegen_decl_func(){
-    
-}
-void codegen_decl_define(){
-    
-}
-void codegen_decl(){
+void codegen_decl_init(t_decl init){
 
+    //Analyzes the ids.
+    codegen_ids(init->u.init.id_list);
+
+    //saves the result from the previous codegen on the stack.
+    save_on_stack("$t0");
+    
+}
+void codegen_decl_assign(t_decl assign){
+
+    //Analyzes the ids.
+    codegen_ids(assign->u.assign.id_list);
+
+    //saves the result from the previous codegen on the stack.
+    save_on_stack("$t0");
+
+    //Analyzes the expresseion.
+    codegen_exp(assign->u.assign.exp);
+
+    //saves the result from the previous codegen on the stack.
+    save_on_stack("$t0");
+    
+}
+void codegen_decl_func(t_decl func){
+
+    printf("%s:\n", func->u.func.id);
+    printf("move $fp, $sp\n");
+    save_on_stack("$ra");
+
+    codegen_stms(func->u.func.stms);
+
+    printf("%s_exit:\n", func->u.func.id);
+    printf("lw $ra, 4($sp)\n");
+    printf("addiu $sp, $sp, %d\n", func->u.func.size);
+    printf("lw $fp, 0($sp)\n");
+    printf("jr $ra\n");
+    
+}
+void codegen_decl_define(t_decl define){
+    
+}
+void codegen_decl(t_decl decl){
+
+    switch(decl->kind){
+
+        case DECL_INIT:
+
+            codegen_decl_init(decl);
+            break;
+
+        case DECL_ASSIGN:
+
+            codegen_decl_assign(decl);
+            break;
+
+        case DECL_FUNC:
+
+            codegen_decl_func(decl);
+            break;
+
+        case DECL_DEFINE:
+
+            codegen_decl_define(decl);
+            break;
+    }
 }
 
 
