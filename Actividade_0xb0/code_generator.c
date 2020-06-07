@@ -239,26 +239,100 @@ void codegen_stm(t_stm stm){
 //LIT AND SUB-GENERATORS
 void codegen_lit_intlit(t_lit intlit){
 
+    printf("li $t0, %d\n", intlit->u.intlit);
+
 }
 void codegen_lit_floatlit(t_lit floatlit){
 
 }
 void codegen_lit_strlit(t_lit strlit){
 
+    //TODO PERGUNTAR AO PROF SE PODE SER :)
+    printf("la %t0, %d", strlit->u.strlit);
+
 }
 void codegen_lit_boollit(t_lit boollit){
+
+    printf("li $t0, %d\n", boollit->u.boollit);
 
 }
 void codegen_lit(t_lit lit){
 
+    switch(lit->kind){
+
+        case LIT_INTLIT:
+
+            codegen_lit_intlit(lit);
+            break;
+
+        case LIT_FLOATLIT:
+
+            codegen_lit_floatlit(lit);
+            break;
+
+        case LIT_STRLIT:
+
+            codegen_lit_strlit(lit);
+            break;
+
+        case LIT_BOOLLIT:
+
+            codegen_lit_boollit(lit);
+            break;
+    }
 }
 
 //EXP AND SUB-GENERATORS
-void codegen_exp_lit(t_exp lit){}
-void codegen_exp_id(t_exp id){}
+void codegen_exp_lit(t_exp lit){
+
+    codegen_lit(lit->u.lit);
+}
+void codegen_exp_id(t_exp id){
+
+    
+}
 void codegen_exp_array(t_exp array){}
 void codegen_exp_binop(t_exp binop){}
 void codegen_exp_unop(t_exp unop){}
 void codegen_exp_assign(t_exp assign){}
 void codegen_exp_func(t_exp func){}
-void codegen_exp(t_exp exp){}
+void codegen_exp(t_exp exp){
+
+    switch(exp->kind) {
+
+        case EXP_LIT:
+
+            codegen_exp_lit(exp);
+            break;
+
+        case EXP_ID:
+
+            codegen_exp_id(exp);
+            break;
+
+        case EXP_ARRAY:
+
+            codegen_exp_array(exp);
+            break;
+
+        case EXP_BINOP:
+
+            codegen_exp_binop(exp);
+            break;
+
+        case EXP_UNOP:
+
+            codegen_exp_unop(exp);
+            break;
+
+        case EXP_ASSIGN:
+
+            codegen_exp_assign(exp);
+            break;
+
+        case EXP_FUNC:
+
+            codegen_exp_func(exp);
+            break;
+    }
+}
