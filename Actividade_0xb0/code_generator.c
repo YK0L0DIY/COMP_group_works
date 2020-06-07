@@ -98,9 +98,12 @@ void codegen_decl(t_decl decl){
 
 //ARGDEFS AND SUB-GENERATORS
 void codegen_argdef(t_argdef argdef) {
+
+    //LOOKUP DO VALOR? OU APENAS RESERVAR ESPAÇO?
     
 }
 
+//ARGDEFS
 void codegen_argdefs(t_argdefs argdefs) {
 
     switch (argdefs->kind){
@@ -151,7 +154,7 @@ void codegen_ids(t_ids ids) {
             codegen_ids(ids->u.id_list);
             break;
         case ID_SINGLE:
-            //TODO guardar na stack ou no $t0
+            //TODO guardar na stack ou no $t0 ??
             break;
         default:
             break;
@@ -182,71 +185,80 @@ void codegen_stms(t_stms stms){
 }
 
 //STM AND SUB_GENERATORS
-void codegen_stm_decl(){
+void codegen_stm_decl(t_stm decl){
+
+    codegen_decl(decl->u.stm_decl.decl);
+}
+void codegen_stm_exp(t_stm exp){
+
+    codegen_decl(exp->u.stm_exp.exp);
 
 }
-void codegen_stm_exp(){
+void codegen_stm_return(t_stm ret){
 
 }
-void codegen_stm_return(){
+void codegen_stm_if_then(t_stm it){
 
 }
-void codegen_stm_if_then(){
+void codegen_stm_if_then_else(t_stm ite){
 
 }
-void codegen_stm_if_then_else(){
+void codegen_stm_while(t_stm whl){
 
 }
-void codegen_stm_while(){
+void codegen_stm_next(t_stm nxt){
 
 }
-void codegen_stm_next(){
+void codegen_stm(t_stm stm){
 
-}
-void codegen_stm(){
-
+    switch(stm->kind){
+        case STM_DECL:
+            codegen_stm_decl(stm);
+            break;
+        case STM_EXP:
+            codegen_stm_exp(stm);
+            break;
+        case STM_RETURN:
+            codegen_stm_return(stm);
+            break;
+        case STM_IF_THEN:
+            codegen_stm_if_then(stm);
+            break;
+        case STM_IF_THEN_ELSE:
+            codegen_stm_if_then_else(stm);
+            break;
+        case STM_WHILE:
+            codegen_stm_while(stm);
+            break;
+        case STM_NEXT:
+            codegen_stm_next(stm);
+            break;
+    }
 }
 
 //LIT AND SUB-GENERATORS
-void codegen_lit_intlit(){
+void codegen_lit_intlit(t_lit intlit){
 
 }
-void codegen_lit_floatlit(){
+void codegen_lit_floatlit(t_lit floatlit){
 
 }
-void codegen_lit_strlit(){
+void codegen_lit_strlit(t_lit strlit){
 
 }
-void codegen_lit_boollit(){
+void codegen_lit_boollit(t_lit boollit){
 
 }
-void codegen_lit(){
+void codegen_lit(t_lit lit){
 
 }
 
 //EXP AND SUB-GENERATORS
-void codegen_exp_lit(){
-
-}
-void codegen_exp_id(){
-    
-}
-void codegen_exp_array(){
-    
-}
-void codegen_exp_binop(){
-    
-}
-void codegen_exp_unop(){
-    
-}
-void codegen_exp_assign(){
-    
-}
-void codegen_exp_func(){
-    
-}
-
-void codegen_exp(){
-
-}
+void codegen_exp_lit(t_exp lit){}
+void codegen_exp_id(t_exp id){}
+void codegen_exp_array(t_exp array){}
+void codegen_exp_binop(t_exp binop){}
+void codegen_exp_unop(t_exp unop){}
+void codegen_exp_assign(t_exp assign){}
+void codegen_exp_func(t_exp func){}
+void codegen_exp(t_exp exp){}
