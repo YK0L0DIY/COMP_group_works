@@ -6,6 +6,10 @@ void save_on_stack(char *reg) {
     printf("sw %s, 0($sp)\n", reg);
     printf("addiu $sp, $sp, -4\n");
 }
+void get_from_stack(char *reg) {
+    printf("lw %s, 4($sp)\n", reg);
+    printf("addiu $sp, $sp, 4\n");
+}
 
 //DECLS
 void codegen_decls(t_decls decls){
@@ -292,8 +296,86 @@ void codegen_exp_id(t_exp id){
     
 }
 void codegen_exp_array(t_exp array){}
-void codegen_exp_binop(t_exp binop){}
-void codegen_exp_unop(t_exp unop){}
+void codegen_exp_binop(t_exp binop){
+
+    codegen_exp(binop->u.binop.arg1);
+    save_on_stack("$t0");
+    codegen_exp(binop->u.binop.arg2);
+    get_from_stack("$t1");
+
+    if(strcmp(binop->u.binop.op, "+") == 0) {
+
+        printf("add $t0, $t1, $t0\n");
+
+    }else if(strcmp(binop->u.binop.op, "-") == 0) {
+
+        printf("sub $t0, $t1, $t0\n");
+
+    }else if(strcmp(binop->u.binop.op, "*") == 0) {
+
+        printf("mul $t0, $t1, $t0\n");
+
+    }else if(strcmp(binop->u.binop.op, "/") == 0) {
+
+        printf("div $t0, $t1, $t0\n");
+
+    }else if(strcmp(binop->u.binop.op, "^") == 0) {
+
+        //TODO NOT IMPLEMENTED :(
+
+    }else if(strcmp(binop->u.binop.op, "mod") == 0) {
+
+        printf("rem $t0, $t1, $t0\n");
+
+    }else if(strcmp(binop->u.binop.op, ">") == 0) {
+
+        printf("sgt $t0, $t1, $t0\n");
+
+    }else if(strcmp(binop->u.binop.op, "<") == 0) {
+
+        printf("slt $t0, $t1, $t0\n");
+
+    }else if(strcmp(binop->u.binop.op, ">=") == 0) {
+
+        printf("sge $t0, $t1, $t0\n");        
+
+    }else if(strcmp(binop->u.binop.op, "<=") == 0) {
+
+        printf("sle $t0, $t1, $t0\n");
+
+    }else if(strcmp(binop->u.binop.op, "==") == 0) {
+
+        printf("seq $t0, $t1, $t0\n");
+
+    }else if(strcmp(binop->u.binop.op, "!=") == 0) {
+
+        printf("sne $t0, $t1, $t0\n");
+
+    }else if(strcmp(binop->u.binop.op, "and") == 0) {
+
+        printf("and $t0, $t1, $t0\n");
+
+    }else if(strcmp(binop->u.binop.op, "or") == 0) {
+
+        printf("or $t0, $t1, $t0\n");
+
+    }
+}
+void codegen_exp_unop(t_exp unop){
+
+    codegen_exp(unop->u.unop.arg);
+
+    if(strcmp(unop->u.unop.op, "not") == 0){
+
+        printf("not $t0, $t0\n");
+
+    } else if(strcmp(unop->u.unop.op, "-") == 0){
+
+        printf("neg $t0, $t0\n");
+    }
+
+
+}
 void codegen_exp_assign(t_exp assign){}
 void codegen_exp_func(t_exp func){}
 void codegen_exp(t_exp exp){
