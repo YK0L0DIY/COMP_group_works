@@ -248,11 +248,13 @@ void codegen_lit_intlit(t_lit intlit){
 }
 void codegen_lit_floatlit(t_lit floatlit){
 
+    printf("li.s $f0, %f\n", floatlit->u.floatlit);
+
 }
 void codegen_lit_strlit(t_lit strlit){
 
     //TODO PERGUNTAR AO PROF SE PODE SER :)
-    printf("la %t0, %d", strlit->u.strlit);
+    printf("la %t0, %d\n", strlit->u.strlit);
 
 }
 void codegen_lit_boollit(t_lit boollit){
@@ -293,9 +295,16 @@ void codegen_exp_lit(t_exp lit){
 }
 void codegen_exp_id(t_exp id){
 
+    //id->u.id_offset o valor é guardado na análise semânticas
+    printf("li $t0, 4\n");
+    printf("mul $t0, $t0, %d\n", id->u.offset_id);
+    printf("addi $t0, $fp, $t0\n");
+    printf("lw $t0, 0($t0)\n");
     
 }
-void codegen_exp_array(t_exp array){}
+void codegen_exp_array(t_exp array){
+
+}
 void codegen_exp_binop(t_exp binop){
 
     codegen_exp(binop->u.binop.arg1);
@@ -373,10 +382,10 @@ void codegen_exp_unop(t_exp unop){
 
         printf("neg $t0, $t0\n");
     }
-
+}
+void codegen_exp_assign(t_exp assign){
 
 }
-void codegen_exp_assign(t_exp assign){}
 void codegen_exp_func(t_exp func){}
 void codegen_exp(t_exp exp){
 

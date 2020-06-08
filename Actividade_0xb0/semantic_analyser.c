@@ -288,6 +288,7 @@ void t_decl_ant(t_decl decl) {
                 ST_discard();
 
                 decl->u.func.size = number_of_args + number_of_vars;
+                temp_id->u.func.size = number_of_args + number_of_vars;
 
                 on_func = 0;
                 number_of_vars = 0;
@@ -354,6 +355,7 @@ void t_ids_ant(t_ids ids, t_type type) {
                     offset_vars--;
 
                     ids->u.offset_var = offset_vars;
+                    temp_id->u.var.offset = offset_vars;
                 }
 
                 temp_id = new_ST_Data();
@@ -523,6 +525,7 @@ t_type t_exp_ant(t_exp exp) {
 
                 case ST_VAR:
 
+                    exp->u.offset_id = temp_id->u.var.offset;
                     return temp_id->u.var.yatype;
                     break;
 

@@ -236,6 +236,7 @@ struct t_exp_ {
 
         //EXP_ID
         char *id;
+        int offset_id;
 
         //EXP_ARRAY
         struct {

@@ -12,11 +12,13 @@ struct st_data_ {
         struct {
             t_type yatype; /* _Type pode ser o tipo definido na análise sintáctica */
             enum {VARloc, VARarg} kind;
+            int offset;
             /* . . . mais tarde, precisaremos de mais info */
         } var;
         struct {
             t_type yatype; /* tipo de retorno */
             t_argdefs arg; /* "lista" de tipos dos argumentos, por ordem */
+            int size;
             /* . . . mais tarde, precisaremos de mais info */
         } func;
 
