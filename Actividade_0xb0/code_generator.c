@@ -1,6 +1,23 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "code_generator.h"
 #include "ya.h"
+
+#define LABEL "LABEL_"
+#define LABEL_SIZE 16
+int label_counter = 0;
+
+char* gen_label() {
+
+    char *to_ret = malloc(sizeof(LABEL_SIZE));
+
+    sprintf(to_ret, "%s%d", LABEL, label_counter);
+    label_counter++;
+
+    return to_ret;
+
+}
 
 void save_on_stack(char *reg) {
     printf("sw %s, 0($sp)\n", reg);
@@ -135,13 +152,18 @@ void codegen_args(t_args args){
         case ARGS_LIST:
             
             //TODO TRATAR O RESULTADO DO PRIMEIRO CODEGEN
-            codegen_exp(args->u.exp);
+
             codegen_args(args->u.args);
+            
+            codegen_exp(args->u.exp);
+            save_on_stack("$t0");
             break;
 
         case ARGS_SINGLE:
 
+            //NAO LIDA COM FLOATS NEM ARRAYS
             codegen_exp(args->u.exp);
+            save_on_stack("$t0");
             break;
         
         default:
@@ -195,22 +217,69 @@ void codegen_stm_decl(t_stm decl){
 }
 void codegen_stm_exp(t_stm exp){
 
-    codegen_decl(exp->u.stm_exp.exp);
+    codegen_exp(exp->u.stm_exp.exp);
 
 }
 void codegen_stm_return(t_stm ret){
 
+    printf("jr $ra\n");
+
 }
 void codegen_stm_if_then(t_stm it){
 
+    char *label_true = gen_label(),
+         *label_end = gen_label();
+
+    codegen_exp(it->u.stm_if_else.exp);
+    
+    printf("bne $t0, $0, %s\n", label_true);
+    printf("j %s\n", label_end);
+
+    printf("%s:\n", label_true);
+    codegen_stms(it->u.stm_if_else.then_stms);
+
+    printf("%s:\n", label_end);
+    
 }
 void codegen_stm_if_then_else(t_stm ite){
+
+    char *label_true = gen_label(),
+         *label_false = gen_label(),
+         *label_end = gen_label();
+
+    codegen_exp(ite->u.stm_if_else.exp);
+    
+    printf("bne $t0, $0, %s\n", label_true);
+
+    printf("%s:\n", label_false);
+    codegen_stms(ite->u.stm_if_else.else_stms);
+
+    printf("j %s\n", label_end);
+
+    printf("%s:\n", label_true);
+    codegen_stms(ite->u.stm_if_else.then_stms);
+    
+    printf("%s:\n", label_end);
 
 }
 void codegen_stm_while(t_stm whl){
 
+    char *label_while = gen_label(),
+         *label_while_end = gen_label();
+
+    printf("%s:\n", label_while);
+    codegen_exp(whl->u.stm_while.exp);
+
+    printf("bne $t0, $0, %s\n", label_while_end);
+    codegen_stms(whl->u.stm_while.while_stms);
+    printf("j %s\n", label_while);
+
+    printf("%s:\n", label_while_end);    
+
 }
 void codegen_stm_next(t_stm nxt){
+
+    //TODO NADA ¯\_(ツ)_/¯
 
 }
 void codegen_stm(t_stm stm){
@@ -254,7 +323,7 @@ void codegen_lit_floatlit(t_lit floatlit){
 void codegen_lit_strlit(t_lit strlit){
 
     //TODO PERGUNTAR AO PROF SE PODE SER :)
-    printf("la %t0, %d\n", strlit->u.strlit);
+    printf("la $t0, %s\n", strlit->u.strlit);
 
 }
 void codegen_lit_boollit(t_lit boollit){
@@ -295,7 +364,6 @@ void codegen_exp_lit(t_exp lit){
 }
 void codegen_exp_id(t_exp id){
 
-    //id->u.id_offset o valor é guardado na análise semânticas
     printf("li $t0, 4\n");
     printf("mul $t0, $t0, %d\n", id->u.offset_id);
     printf("addi $t0, $fp, $t0\n");
@@ -386,7 +454,14 @@ void codegen_exp_unop(t_exp unop){
 void codegen_exp_assign(t_exp assign){
 
 }
-void codegen_exp_func(t_exp func){}
+void codegen_exp_func(t_exp func){
+
+    save_on_stack("$fp");
+    func->u.func.args;
+
+    printf("jal %s\n", func->u.func.id);
+
+}
 void codegen_exp(t_exp exp){
 
     switch(exp->kind) {

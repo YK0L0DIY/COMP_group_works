@@ -4,6 +4,7 @@
 #include "ya.h"
 #include "ST.h"
 #include "semantic_analyser.h"
+#include "code_generator.h"
 
 extern int yylineno;
 extern FILE *yyin;
@@ -81,7 +82,7 @@ void yyerror (char const *);
 %%
 
 program:  /*    empty */								{$$ = NULL;}
-        |	    decls								{$$ = $1; ST_new_scope(); t_decls_ant($$);}
+        |	    decls								{$$ = $1; ST_new_scope(); t_decls_ant($$); codegen_decls($$);}
                 ;
 
 decls:   	    decl         							{$$ = t_decls_new($1, NULL);}
