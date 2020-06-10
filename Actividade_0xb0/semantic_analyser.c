@@ -132,6 +132,8 @@ void ERROR(int error) {
             printf("Assign with incompatible types\n");
             break;
     }
+
+    exit(1);
 }
 
 t_type check_types(int op, t_type type1, t_type type2) {

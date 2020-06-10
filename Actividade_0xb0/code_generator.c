@@ -68,8 +68,9 @@ void codegen_decl_assign(t_decl assign){
     //Analyzes the expresseion.
     codegen_exp(assign->u.assign.exp);
 
-    //saves the result from the previous codegen on the stack.
-    save_on_stack("$t0");
+    get_from_stack("$t1");
+
+    printf("move $t1, $t0\n");
     
 }
 void codegen_decl_func(t_decl func){
@@ -453,11 +454,20 @@ void codegen_exp_unop(t_exp unop){
 }
 void codegen_exp_assign(t_exp assign){
 
+    codegen_exp(assign->u.assign.id);
+    save_on_stack("$t0");
+
+    codegen_exp(assign->u.assign.value);
+
+    get_from_stack("$t1");
+
+    printf("move $t1, $t0\n");
+
 }
 void codegen_exp_func(t_exp func){
 
     save_on_stack("$fp");
-    func->u.func.args;
+    codegen_args(func->u.func.args);
 
     printf("jal %s\n", func->u.func.id);
 
